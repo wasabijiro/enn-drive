@@ -25,6 +25,7 @@ export async function GET() {
     });
 }
 export async function POST(request) {
+    console.log("location post -start-")
     const { user_id, latitude, longitude } = await request.json();
     const { data, error } = await supabase
         .from('locations')
@@ -38,6 +39,8 @@ export async function POST(request) {
             status: 500,
         });
     }
+
+    console.log("location post -end-")
 
     return new Response(JSON.stringify(data), {
         status: 201,

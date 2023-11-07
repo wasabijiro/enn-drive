@@ -6,24 +6,31 @@ export default function Page() {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    const fetchLocations = async () => {
-      const response = await fetch("/api/location");
-      const data = await response.json();
-
-      if (response.ok && Array.isArray(data)) {
-        setLocations(data);
-      } else {
-        console.error("Error fetching data: ", data.error);
-      }
-    };
-
     fetchLocations();
-  }, [locations]);
+  }, []);
+
+  const fetchLocations = async () => {
+    const response = await fetch("/api/location");
+    const data = await response.json();
+
+    if (response.ok && Array.isArray(data)) {
+      setLocations(data);
+    } else {
+      console.error("Error fetching data: ", data.error);
+    }
+  };
+
+  const getCurrentPosition = () => {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  };
 
   const addLocation = async () => {
-    navigator.geolocation.getCurrentPosition(async (position) => {
+    try {
+      const position = await getCurrentPosition();
       const { latitude, longitude } = position.coords;
-      const user_id = 1;
+      const user_id = 1; // この user_id は例として使用されています。実際には認証されたユーザーのIDを使用してください。
 
       const response = await fetch("/api/location", {
         method: "POST",
@@ -34,21 +41,49 @@ export default function Page() {
       });
 
       if (!response.ok) {
-        console.error("Error posting data: ", response.statusText);
-      } else {
-        const newLocation = await response.json();
-        setLocations((locations) => [...locations, newLocation]); // newLocationがオブジェクトであると想定
+        throw new Error(`Error posting data: ${response.statusText}`);
       }
-    });
+
+      const newLocation = await response.json();
+      setLocations((currentLocations) => [...currentLocations, newLocation]);
+    } catch (error) {
+      console.error("Error adding location: ", error);
+    }
+  };
+
+  const likeFunction = async () => {
+    try {
+      const position = await getCurrentPosition();
+      const { latitude, longitude } = position.coords;
+      const user_id = 1; // こちらも addLocation と同様に実際のユーザーIDに置き換えてください。
+
+      const response = await fetch("/api/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id, latitude, longitude }),
+      });
+
+      // レスポンスを確認
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
+
+      const data = await response.json();
+    } catch (error) {
+      console.error("Error sending like: ", error);
+    }
   };
 
   return (
     <div>
       <h1>Locations</h1>
       <button onClick={addLocation}>ロケーションを追加</button>
+      <button onClick={likeFunction}>いいね</button>
       <ul>
         {locations.map((location) => {
-          if (!location) return null; // locationがnullまたはundefinedの場合は何も描画しない
+          if (!location) return null;
           return (
             <li key={location.id}>
               {location.latitude}, {location.longitude}
