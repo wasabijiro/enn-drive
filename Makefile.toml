@@ -1,0 +1,11 @@
+[tasks."ui:dev"]
+script = '''
+cd frontend
+npm run dev
+'''
+
+[tasks."ui:build"]
+script = '''
+cd frontend
+npm run build
+'''
