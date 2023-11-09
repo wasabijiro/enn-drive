@@ -1,3 +1,9 @@
+[tasks."ui:install"]
+script = '''
+cd frontend
+npm i
+'''
+
 [tasks."ui:dev"]
 script = '''
 cd frontend
