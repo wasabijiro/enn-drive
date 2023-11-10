@@ -5,6 +5,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 // @ts-ignore
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// @ts-ignore
 export async function POST(req) {
   try {
     const { user_id, latitude, longitude } = await req.json();
@@ -22,9 +23,9 @@ export async function POST(req) {
       throw new Error('Error fetching nearby users');
     }
     console.log("nearbyUsers2");
-
+    
     const nearbyUsers = await nearbyResponse.json();
-
+    
     // 取得したユーザーに対していいねを送る
     for (const user of nearbyUsers) {
       if (user.user_id !== user_id) {
@@ -36,7 +37,7 @@ export async function POST(req) {
           tokens: 1,
           density: 1,
         };
-
+        
         const response = await fetch("http://localhost:3000/api/insertlike", {
           method: "POST",
           headers: {
@@ -44,17 +45,17 @@ export async function POST(req) {
           },
           body: JSON.stringify(likeData),
         });
-
+        
         if (!response.ok) {
           console.error("Error sending like: ", response.statusText);
           continue;
         }
-
+        
         const responseData = await response.json();
         console.log("Like sent:", responseData);
       }
     }
-
+    
     return new Response(JSON.stringify({ message: "Likes sent successfully" }), {
       status: 200,
       headers: {
@@ -62,6 +63,7 @@ export async function POST(req) {
       },
     });
   } catch (error) {
+    // @ts-ignore
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }
