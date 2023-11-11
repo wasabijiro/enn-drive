@@ -1,5 +1,5 @@
-// src/app/page.jsx
 "use client";
+import React from "react";
 import { useState, useEffect } from "react";
 
 export default function Page() {
@@ -9,17 +9,61 @@ export default function Page() {
     fetchLocations();
   }, []);
 
-  const fetchLocations = async () => {
-    const response = await fetch("/api/location");
-    const data = await response.json();
+  // @ts-ignore
+  async function apiRequest(endpoint, options = {}) {
+    const response = await fetch(endpoint, {
+      headers: {
+        "Content-Type": "application/json",
+        // @ts-ignore
+        ...options.headers,
+      },
+      ...options,
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    return response.json();
+  }
 
-    if (response.ok && Array.isArray(data)) {
-      // @ts-ignore
-      setLocations(data);
-    } else {
-      console.error("Error fetching data: ", data.error);
+  const fetchLocations = async () => {
+    try {
+      const data = await apiRequest("/api/location");
+      if (Array.isArray(data)) {
+        // @ts-ignore
+        setLocations(data.filter(location => location != null && 'id' in location));
+      } else {
+        throw new Error("Invalid data format");
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
     }
   };
+
+  const addLocation = async () => {
+    try {
+      const position = await getCurrentPosition();
+      // @ts-ignore
+
+      const { latitude, longitude } = position.coords;
+      const user_id = 1;
+
+      const newLocation = await apiRequest("/api/location", {
+        method: "POST",
+        body: JSON.stringify({ user_id, latitude, longitude }),
+      });
+
+      if (newLocation && 'id' in newLocation) {
+        // @ts-ignore
+
+        setLocations((currentLocations) => [...currentLocations, newLocation]);
+      } else {
+        throw new Error("Invalid location data");
+      }
+    } catch (error) {
+      console.error("Error adding location: ", error);
+    }
+  };
+
 
   const getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
@@ -27,54 +71,18 @@ export default function Page() {
     });
   };
 
-  const addLocation = async () => {
-    try {
-      const position = await getCurrentPosition();
-      // @ts-ignore
-      const { latitude, longitude } = position.coords;
-      const user_id = 1; // この user_id は例として使用されています。実際には認証されたユーザーのIDを使用してください。
-
-      const response = await fetch("/api/location", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user_id, latitude, longitude }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error posting data: ${response.statusText}`);
-      }
-
-      const newLocation = await response.json();
-      // @ts-ignore
-      setLocations((currentLocations) => [...currentLocations, newLocation]);
-    } catch (error) {
-      console.error("Error adding location: ", error);
-    }
-  };
-
   const likeFunction = async () => {
     try {
       const position = await getCurrentPosition();
       // @ts-ignore
-      const { latitude, longitude } = position.coords;
-      const user_id = 1; // こちらも addLocation と同様に実際のユーザーIDに置き換えてください。
 
-      const response = await fetch("/api/like", {
+      const { latitude, longitude } = position.coords;
+      const user_id = 2;
+
+      await apiRequest("/api/like", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ user_id, latitude, longitude }),
       });
-
-      // レスポンスを確認
-      if (!response.ok) {
-        throw new Error("Something went wrong");
-      }
-
-      const data = await response.json();
     } catch (error) {
       console.error("Error sending like: ", error);
     }
@@ -83,20 +91,39 @@ export default function Page() {
   return (
     <div>
       <h1>Locations</h1>
-      <button onClick={addLocation}>ロケーションを追加</button>
-      <button onClick={likeFunction}>いいね</button>
-      <ul>
-        {locations.map((location) => {
-          if (!location) return null;
-          return (
-            // @ts-ignore
-            <li key={location.id}>
+      <div>
+        <button onClick={addLocation}>ロケーションを追加</button>
+      </div>
+      <div>
+        <button onClick={likeFunction}>いいね</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ユーザーID</th>
+            <th>緯度</th>
+            <th>経度</th>
+            <th>作成日時</th>
+          </tr>
+        </thead>
+        <tbody>
+          {locations.map((location, index) => (
+            <tr key={index}>
               {/* @ts-ignore */}
-              {location.latitude}, {location.longitude}
-            </li>
-          );
-        })}
-      </ul>
+              <td>{location.id}</td>
+              {/* @ts-ignore */}
+              <td>{location.user_id}</td>
+              {/* @ts-ignore */}
+              <td>{location.latitude}</td>
+              {/* @ts-ignore */}
+              <td>{location.longitude}</td>
+              {/* @ts-ignore */}
+              <td>{new Date(location.created_at).toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
