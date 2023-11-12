@@ -16,13 +16,13 @@ cd frontend
 npm run build
 '''
 
-[tasks."build:sui"]
+[tasks."sui:build"]
 script = '''
 cd contract
 sui move build
 '''
 
-[tasks."deploy:sui"]
+[tasks."sui:deploy"]
 script = '''
 cd contract
 sui client publish --gas-budget 123456789 --skip-dependency-verification
@@ -31,12 +31,13 @@ sui client publish --gas-budget 123456789 --skip-dependency-verification
 [tasks."sui:mint"]
 script = '''
 cd contract
-PACKAGE=0x3645476e42a0cc19a0102cb486b410c585262d59fdcecc43aeb8191e2103a397
+PACKAGE=0x9de53f0f8671835352cbaf51a3b7beafeb39e074474e0755ffd67bc17af49341
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function mint \
     --args \
+        0x114526d99f997bf70c53928425cbc1cd406cf6e2fc24ced19a47a29c5ececce9 \
         0x6 \
         "Mazda Drive NFT" \
         "Web3 Global Hackathon for Mazda" \
@@ -47,7 +48,7 @@ sui client call \
 [tasks."sui:like"]
 script = '''
 cd contract
-PACKAGE=0x3645476e42a0cc19a0102cb486b410c585262d59fdcecc43aeb8191e2103a397
+PACKAGE=0xf424e89f4461ebacf101eccf961a77de0a08a11772ece8123c7f284f34a954d4
 sui client call \
     --package $PACKAGE \
     --module issuer \
