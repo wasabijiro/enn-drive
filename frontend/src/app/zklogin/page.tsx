@@ -72,7 +72,7 @@ export default function Home() {
       className="flex flex-col items-center justify-center w-full"
       style={styles.compose}
     >
-      <div style={styles.contentTop}>
+      {/* <div style={styles.contentTop}>
         <p
           className={`${style.mySpecialFont} text-right text-black text-xl mr-5`}
         >
@@ -99,8 +99,9 @@ export default function Home() {
             style={{ height: "1.25em" }}
           />
         </p>
-      </div>
-      <div id="login-buttons" className="section mb-8">
+      </div> */}
+
+      <div id="login-buttons" className="section mb-8 flex items-center justify-center">
         {openIdProviders.map((provider) => (
           <button
             className={`btn-login text-black font-bold py-1 px-10 rounded border-[2px] border-gray-300 ${provider} mt-5`}
@@ -119,7 +120,7 @@ export default function Home() {
           </button>
         ))}
       </div>
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <div className="flex mb-2">
           <p className="text-black text-lg flex-shrink-0">zkLogin Address:</p>
           {zkLoginSetup.userAddr && (
@@ -177,7 +178,7 @@ export default function Home() {
         >
           {loading || zkLoginSetup.isProofsLoading ? "Loading..." : "Mint"}
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }
