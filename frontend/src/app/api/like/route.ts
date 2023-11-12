@@ -17,7 +17,7 @@ export async function POST(req) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: user_id, latitude, longitude }),
+      body: JSON.stringify({ user_id: user_id, latitude, longitude }),
     });
     if (!nearbyResponse.ok) {
       throw new Error('Error fetching nearby users');
