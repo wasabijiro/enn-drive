@@ -15,3 +15,44 @@ script = '''
 cd frontend
 npm run build
 '''
+
+[tasks."build:sui"]
+script = '''
+cd contract
+sui move build
+'''
+
+[tasks."deploy:sui"]
+script = '''
+cd contract
+sui client publish --gas-budget 123456789 --skip-dependency-verification
+'''
+
+[tasks."sui:mint"]
+script = '''
+cd contract
+PACKAGE=0x3645476e42a0cc19a0102cb486b410c585262d59fdcecc43aeb8191e2103a397
+sui client call \
+    --package $PACKAGE \
+    --module issuer \
+    --function mint \
+    --args \
+        0x6 \
+        "Mazda Drive NFT" \
+        "Web3 Global Hackathon for Mazda" \
+        "https://pbs.twimg.com/profile_images/1538981748478214144/EUjTgb0v_400x400.jpg" \
+    --gas-budget 123456789 \
+'''
+
+[tasks."sui:like"]
+script = '''
+cd contract
+PACKAGE=0x3645476e42a0cc19a0102cb486b410c585262d59fdcecc43aeb8191e2103a397
+sui client call \
+    --package $PACKAGE \
+    --module issuer \
+    --function like \
+    --args \
+        0x983a24c706150b0f9fc5f2f781d7a52263e650c5b90a1c8f54286b7ed8858709 \
+    --gas-budget 123456789
+'''
