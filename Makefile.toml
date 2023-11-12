@@ -15,3 +15,15 @@ script = '''
 cd frontend
 npm run build
 '''
+
+[tasks."build:sui"]
+script = '''
+cd contract
+sui move build
+'''
+
+[tasks."deploy:sui"]
+script = '''
+cd contract
+sui client publish --gas-budget 123456789 --skip-dependency-verification
+'''

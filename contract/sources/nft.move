@@ -1,6 +1,6 @@
-/// Example of an unlimited "Sui CoCoNFT" collection - anyone can
-/// mint their CoCoNFT. Shows how to initialize the `Publisher` and how
-/// to use it to get the `Display<CoCoNFT>` object - a way to describe a
+/// Example of an unlimited "Sui DriveNFT" collection - anyone can
+/// mint their DriveNFT. Shows how to initialize the `Publisher` and how
+/// to use it to get the `Display<DriveNFT>` object - a way to describe a
 /// type for the ecosystem.
 module enn::nft {
     use std::string::{utf8, String, Self};
@@ -19,8 +19,8 @@ module enn::nft {
 
     friend enn::issuer;
 
-    /// The CoCoNFT - an outstanding collection of digital art.
-    struct CoCoNFT has key, store {
+    /// The DriveNFT - an outstanding collection of digital art.
+    struct DriveNFT has key, store {
         id: UID,
         name: String,
         description: String,
@@ -50,23 +50,23 @@ module enn::nft {
         ];
 
         let values = vector[
-            // For `name` one can use the `CoCoNFT.name` property
+            // For `name` one can use the `DriveNFT.name` property
             utf8(b"{name}"),
-            utf8(b"https://poap.umilabs.org/{id}"),
+            utf8(b""),
             utf8(b"{img_url}"),
-            // Description is static for all `CoCoNFT` objects.
+            // Description is static for all `DriveNFT` objects.
             utf8(b"{description}"),
             // Project URL is usually static
             utf8(b"https://poap.umilabs.org"),
             // Creator field can be any
-            utf8(b"Sui Japan Meetup Visitor")
+            utf8(b"Mazda Drive NFT")
         ];
 
         // Claim the `Publisher` for the package!
         let publisher = package::claim(otw, ctx);
 
-        // Get a new `Display` object for the `CoCoNFT` type.
-        let display = display::new_with_fields<CoCoNFT>(
+        // Get a new `Display` object for the `DriveNFT` type.
+        let display = display::new_with_fields<DriveNFT>(
             &publisher, keys, values, ctx
         );
 
@@ -83,8 +83,8 @@ module enn::nft {
         img_url: String,
         clock: &Clock,
         ctx: &mut TxContext,
-    ): CoCoNFT {
-        CoCoNFT {
+    ): DriveNFT {
+        DriveNFT {
             id: object::new(ctx),
             name,
             description,
@@ -95,7 +95,7 @@ module enn::nft {
     }
 
     public(friend) fun uid_mut_as_owner(
-        self: &mut CoCoNFT
+        self: &mut DriveNFT
     ): &mut UID {
         &mut self.id
     }
