@@ -9,10 +9,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // @ts-ignore
 export async function POST(req) {
   try {
-    const { userId, latitude, longitude } = await req.json();
+    const { user_id, latitude, longitude } = await req.json();
     console.log("getNearbyLocations");
     const { data, error } = await supabase
-    .rpc("get_nearby_user_locations", { _user_id: userId, _latitude: latitude, _longitude: longitude });
+    .rpc("get_nearby_user_locations", { _user_id: user_id, _latitude: latitude, _longitude: longitude });
     if (error) {
       throw new Error('Error fetching nearby locations');
     }
@@ -26,4 +26,4 @@ export async function POST(req) {
 
 // curl -X POST 'http://localhost:3000/api/getNearbyLocations' \
 //   -H 'Content-Type: application/json' \
-//   -d '{"userId": 2, "latitude": 35.664604, "longitude": 139.738182}'
+//   -d '{"user_id": 2, "latitude": 35.664604, "longitude": 139.738182}'

@@ -41,7 +41,7 @@ export async function POST(request) {
   console.log("location post -end-");
 
   return new Response(JSON.stringify(data), {
-    status: 201,
+    status: 200,
     headers: {
       "Content-Type": "application/json",
     },
