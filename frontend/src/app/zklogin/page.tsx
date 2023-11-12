@@ -8,7 +8,7 @@ import { Account, OpenIdProvider } from "@/types";
 import { useZkLoginSetup } from "@/libs/store/zkLogin";
 import { moveCallSponsored } from "@/libs/sponsoredZkLogin";
 import { shortenAddress } from "@/utils";
-import { ZKLOGIN_ACCONTS } from "@/config";
+import { ZKLOGIN_ACCONTS, openIdProviders } from "@/config";
 import { NETWORK } from "@/config/sui";
 import style from "@/app/styles/login.module.css";
 import { styles } from "@/app/styles";
@@ -18,9 +18,6 @@ import { useLottie } from "@/utils/useLottie";
 export default function Home() {
   const router = useRouter();
   const [modalContent, setModalContent] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-  const [digest, setDigest] = useState<string>("");
-  const [err, setErr] = useState<string>("");
   const [account, setAccount] = useLocalStorage<Account | null>(
     ZKLOGIN_ACCONTS,
     null
@@ -49,30 +46,12 @@ export default function Home() {
     window.location.replace(loginUrl);
   };
 
-  const openIdProviders: OpenIdProvider[] = [
-    "Google",
-    // "Twitch",
-    // "Facebook",
-  ];
-
-  const status = () => {
-    if (!zkLoginSetup.userAddr) {
-      return "Not signed in";
-    }
-
-    if (!zkLoginSetup.zkProofs && zkLoginSetup.isProofsLoading) {
-      return "Generating zk proof...";
-    }
-
-    return "Ready!";
-  };
-
   return (
     <div
       className="flex flex-col items-center justify-center w-full"
       style={styles.compose}
     >
-      {/* <div style={styles.contentTop}>
+      <div style={styles.contentTop}>
         <p
           className={`${style.mySpecialFont} text-right text-black text-xl mr-5`}
         >
@@ -99,86 +78,31 @@ export default function Home() {
             style={{ height: "1.25em" }}
           />
         </p>
-      </div> */}
-
-      <div id="login-buttons" className="section mb-8 flex items-center justify-center">
-        {openIdProviders.map((provider) => (
-          <button
-            className={`btn-login text-black font-bold py-1 px-10 rounded border-[2px] border-gray-300 ${provider} mt-5`}
-            onClick={() => {
-              beginZkLogin(provider);
-            }}
-            key={provider}
-          >
-            <div className="flex items-center">
-              <div
-                className="max-w-[50px]"
-                ref={googleAnimationContainer}
-              ></div>
-              <div className="mr-5 text-lg">Login with {provider}</div>
-            </div>
-          </button>
-        ))}
       </div>
-      {/* <div className="flex flex-col">
-        <div className="flex mb-2">
-          <p className="text-black text-lg flex-shrink-0">zkLogin Address:</p>
-          {zkLoginSetup.userAddr && (
-            <b className="ml-2">
-              <a
-                className="text-blue-400 underline"
-                href={`https://suiscan.xyz/${NETWORK}/account/${zkLoginSetup.userAddr}/tx-blocks`}
-              >
-                {shortenAddress(zkLoginSetup.userAddr)}
-              </a>
-            </b>
-          )}
-        </div>
-        <div className="flex mb-4">
-          <p className="text-black text-lg flex-shrink-0">Current Status:</p>
-          <b className="ml-2 text-black text-lg">{status()}</b>
-        </div>
-        <p className="mt-2">
-          <a
-            className="text-blue-400 underline"
-            href={`https://suiscan.xyz/${NETWORK}/tx/${digest}`}
-          >
-            {digest}
-          </a>
-        </p>
-      </div>
-      <div>
-        <div className="text-red-700 text-lg flex-shrink-0">
-          <b>{err}</b>
-        </div>
-      </div>
-      <div
-        className="flex flex-col justify-center items-center mb-5"
-        style={styles.contentBottom}
-      >
-        <button
-          onClick={async () => {
-            setLoading(true);
-            const account = zkLoginSetup.account();
-            console.log("account", account);
-            console.log(zkLoginSetup.userAddr);
-            const txb = new TransactionBlock();
-            const result = await moveCallSponsored(txb, account);
-            console.log(result.effects?.status.status);
-            setLoading(false);
-          }}
-          className={`text-white w-32 py-3 px-5 rounded-xl text-xl ${
-            style.myRobotoFont
-          } ${
-            !zkLoginSetup.zkProofs
-              ? "bg-slate-800"
-              : "bg-blue-600 hover:bg-slate-700"
-          }`}
-          disabled={!zkLoginSetup.zkProofs || loading}
+      <div className="flex flex-col items-center justify-center w-full h-screen mb-10">
+        <div
+          id="login-buttons"
+          className="section flex mb-10 items-center justify-center"
         >
-          {loading || zkLoginSetup.isProofsLoading ? "Loading..." : "Mint"}
-        </button>
-      </div> */}
+          {openIdProviders.map((provider) => (
+            <button
+              className={`btn-login text-black font-bold py-1 px-10 rounded border-[2px] border-gray-300 ${provider} mt-5`}
+              onClick={() => {
+                beginZkLogin(provider);
+              }}
+              key={provider}
+            >
+              <div className="flex items-center">
+                <div
+                  className="max-w-[50px]"
+                  ref={googleAnimationContainer}
+                ></div>
+                <div className="mr-5 text-lg">Login with {provider}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
