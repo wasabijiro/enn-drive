@@ -2,9 +2,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-export default function Page() {
+export default function Page({ userid = 1 }) {
   // const [locations, setLocations] = useState([]);
-  const [user_id, setuser_id] = useState(1); // user_id ステートの追加
+  const [user_id, setuser_id] = useState(userid); // user_id ステートの追加
 
   // useEffect(() => {
   //   fetchLocations();

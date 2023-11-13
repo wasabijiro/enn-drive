@@ -9,25 +9,23 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export async function POST(req) {
   try {
     const { user_id, latitude, longitude } = await req.json();
-    
+
     console.log("nearbyUsers1");
-    // 近隣のユーザーを取得
     const nearbyResponse = await fetch("http://localhost:3000/api/getNearbyLocations", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json", },
       body: JSON.stringify({ user_id: user_id, latitude, longitude }),
     });
     if (!nearbyResponse.ok) {
       throw new Error('Error fetching nearby users');
     }
     console.log("nearbyUsers2");
-    
+
     const nearbyUsers = await nearbyResponse.json();
-    
+
     // 取得したユーザーに対していいねを送る
     for (const user of nearbyUsers) {
+      console.log(user);
       if (user.user_id !== user_id) {
         const likeData = {
           giver_id: user_id,
@@ -37,30 +35,26 @@ export async function POST(req) {
           tokens: 1,
           density: 1,
         };
-        
+
         const response = await fetch("http://localhost:3000/api/insertlike", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json", },
           body: JSON.stringify(likeData),
         });
-        
+
         if (!response.ok) {
           console.error("Error sending like: ", response.statusText);
           continue;
         }
-        
+
         const responseData = await response.json();
         console.log("Like sent:", responseData);
       }
     }
-    
+
     return new Response(JSON.stringify({ message: "Likes sent successfully" }), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json", },
     });
   } catch (error) {
     // @ts-ignore
