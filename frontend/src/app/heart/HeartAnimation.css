@@ -1,0 +1,36 @@
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.heart {
+  animation: fadeInOut 2.5s ease-in-out forwards; /* 5秒間のアニメーション */
+  position: absolute;
+  color: #ff758e;
+}
+
+.fullheart {
+  animation: fullFadeInOut 7s ease-in-out forwards; /* 5秒間のアニメーション */
+}
+
+@keyframes fullFadeInOut {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    background-color: rgba(255, 117, 142, 0);
+  }
+  90% {
+    opacity: 1;
+    background-color: rgba(255, 117, 142, 1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
