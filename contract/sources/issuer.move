@@ -43,7 +43,8 @@ module enn::issuer {
     ) {
         let nft = nft::new(name, description, img_url, clock, ctx);
         df::add(nft::uid_mut_as_owner(&mut nft), count_key(), 0);
-        df::add(nft::uid_mut_as_owner(&mut nft), liked_key(), vec_set::empty<address>());
+        df::add(nft::uid_mut_as_owner(&mut nft), liked_key(), vector::empty<address>());
+        // df::add(nft::uid_mut_as_owner(&mut nft), liked_key(), vec_set::empty<address>());
         table::add(&mut index.table, tx_context::sender(ctx), object::id(&nft));
         transfer::public_share_object(nft);
     }
@@ -54,8 +55,10 @@ module enn::issuer {
     ){
         let count: &mut u64 = df::borrow_mut(nft::uid_mut_as_owner(nft), count_key());
         *count = *count + 1;
-        let liked_set: &mut VecSet<address> = df::borrow_mut(nft::uid_mut_as_owner(nft), liked_key());
-        vec_set::insert(liked_set, tx_context::sender(ctx));
+        let liked_set: &mut vector<address> = df::borrow_mut(nft::uid_mut_as_owner(nft), liked_key());
+        // let liked_set: &mut VecSet<address> = df::borrow_mut(nft::uid_mut_as_owner(nft), liked_key());
+        vector::push_back(liked_set, tx_context::sender(ctx));
+        // vec_set::insert(liked_set, tx_context::sender(ctx));
     }
 
 }

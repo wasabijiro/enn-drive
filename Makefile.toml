@@ -43,13 +43,13 @@ sui client publish --gas-budget 123456789 --skip-dependency-verification
 [tasks."sui:mint"]
 script = '''
 cd contract
-PACKAGE=0x0e0131a7ce2b0d4090652f1a666ddec8ed17b933af9f7f03d8d2b2ae642f6ff7
+PACKAGE=0x49485ac54a0a889a387bda7aede26b4bf22e4a4cd4a4f39dd6dab2af4f182164
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function mint \
     --args \
-        0x461eedd2255074df76b4a0cd92ed7d1702ddd023f6c1e1b8c871c06bae20c6ae \
+        0x288ecf868475733935eff7a09b3b41676a606fee7c0d77bb3782cd2507c72547 \
         0x6 \
         "Mazda Drive NFT" \
         "Web3 Global Hackathon for Mazda" \
@@ -60,12 +60,12 @@ sui client call \
 [tasks."sui:like"]
 script = '''
 cd contract
-PACKAGE=0x0e0131a7ce2b0d4090652f1a666ddec8ed17b933af9f7f03d8d2b2ae642f6ff7
+PACKAGE=0x49485ac54a0a889a387bda7aede26b4bf22e4a4cd4a4f39dd6dab2af4f182164
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function like \
     --args \
-        0x1be823e0ffc26fef0542e1e47f367d94e8441c1cbc0351b522fe1c66c1a6bbc7 \
+        0x82902f562d65709d5e68e4b94c6523f1ed0d34e5a406ef6fdda4db03dbc940b5 \
     --gas-budget 123456789
 '''
