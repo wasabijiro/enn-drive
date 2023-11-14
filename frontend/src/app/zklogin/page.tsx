@@ -10,8 +10,8 @@ import { moveCallSponsored } from "@/libs/sponsoredZkLogin";
 import { shortenAddress } from "@/utils";
 import { ZKLOGIN_ACCONTS, openIdProviders } from "@/config";
 import { NETWORK } from "@/config/sui";
-import style from "@/app/styles/login.module.css";
-import { styles } from "@/app/styles";
+import style from "@/styles/login.module.css";
+import { styles } from "@/styles";
 import googleAnimationData from "@/components/interface/animations/google.json";
 import { useLottie } from "@/utils/useLottie";
 

@@ -6,16 +6,15 @@ export default function Page() {
   // const [locations, setLocations] = useState([]);
   const [user_id, setuser_id] = useState(1); // user_id ステートの追加
 
-  
   useEffect(() => {
     const intervalId = setInterval(() => {
       addLocation(); // 15秒ごとにこの関数を実行
     }, 15000); // 15000ミリ秒 = 15秒
-    
+
     return () => clearInterval(intervalId); // コンポーネントのアンマウント時にインターバルをクリア
     // @ts-ignore
   }, [user_id]); // user_idが変更された時にもインターバルを再設定
-  
+
   // useEffect(() => {
   //   fetchLocations();
   // }, []);
@@ -64,8 +63,8 @@ export default function Page() {
         method: "POST",
         body: JSON.stringify({ user_id, latitude, longitude }), // user_id を使用
       });
-      if (newLocation && 'id' in newLocation) {
-        console.log("added")
+      if (newLocation && "id" in newLocation) {
+        console.log("added");
         // @ts-ignore
         // setLocations((currentLocations) => [...currentLocations, newLocation]);
       } else {
@@ -75,7 +74,6 @@ export default function Page() {
       console.error("Error adding location: ", error);
     }
   };
-
 
   const getCurrentPosition = () => {
     return new Promise((resolve, reject) => {

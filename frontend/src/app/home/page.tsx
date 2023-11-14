@@ -10,8 +10,9 @@ import { moveCallSponsored } from "@/libs/sponsoredZkLogin";
 import { shortenAddress } from "@/utils";
 import { ZKLOGIN_ACCONTS } from "@/config";
 import { NETWORK } from "@/config/sui";
-import style from "@/app/styles/login.module.css";
-import { styles } from "@/app/styles";
+import style from "@/styles/login.module.css";
+import { styles } from "@/styles";
+import { driveObjectType } from "@/config";
 
 export default function Home() {
   const router = useRouter();
@@ -121,6 +122,20 @@ export default function Home() {
             const txb = new TransactionBlock();
             const result = await moveCallSponsored(txb, account);
             console.log(result.effects?.status.status);
+            if (result.effects?.status.status === "success") {
+              setDigest(result.digest);
+              const matchingObject: any = result.objectChanges?.find(
+                (obj: any) => obj?.objectType === driveObjectType
+              );
+              console.log({ matchingObject });
+              if (!matchingObject || !matchingObject.objectType) {
+                setErr("Double Mint rejected...");
+                throw new Error("objectType not found");
+              }
+            } else {
+              // setErr(`Transaction Failed: ${result.effects?.status.error}`);
+              setErr("Transaction Failed...");
+            }
             setLoading(false);
           }}
           className={`text-white w-32 py-3 px-5 rounded-xl text-xl ${
