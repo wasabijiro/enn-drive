@@ -16,6 +16,18 @@ cd frontend
 npm run build
 '''
 
+[tasks."install:gen"]
+script = '''
+cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
+'''
+
+[tasks."gen:sui"]
+script = '''
+cd frontend/
+bun run gen:sui
+bun run lint
+'''
+
 [tasks."sui:build"]
 script = '''
 cd contract
@@ -31,13 +43,13 @@ sui client publish --gas-budget 123456789 --skip-dependency-verification
 [tasks."sui:mint"]
 script = '''
 cd contract
-PACKAGE=0x9de53f0f8671835352cbaf51a3b7beafeb39e074474e0755ffd67bc17af49341
+PACKAGE=0x0e0131a7ce2b0d4090652f1a666ddec8ed17b933af9f7f03d8d2b2ae642f6ff7
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function mint \
     --args \
-        0x114526d99f997bf70c53928425cbc1cd406cf6e2fc24ced19a47a29c5ececce9 \
+        0x461eedd2255074df76b4a0cd92ed7d1702ddd023f6c1e1b8c871c06bae20c6ae \
         0x6 \
         "Mazda Drive NFT" \
         "Web3 Global Hackathon for Mazda" \
@@ -48,12 +60,12 @@ sui client call \
 [tasks."sui:like"]
 script = '''
 cd contract
-PACKAGE=0xf424e89f4461ebacf101eccf961a77de0a08a11772ece8123c7f284f34a954d4
+PACKAGE=0x0e0131a7ce2b0d4090652f1a666ddec8ed17b933af9f7f03d8d2b2ae642f6ff7
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function like \
     --args \
-        0x983a24c706150b0f9fc5f2f781d7a52263e650c5b90a1c8f54286b7ed8858709 \
+        0x1be823e0ffc26fef0542e1e47f367d94e8441c1cbc0351b522fe1c66c1a6bbc7 \
     --gas-budget 123456789
 '''
