@@ -8,86 +8,63 @@ import formatCreatedAt from '../utils/formatDate';
 import Snackbar from '@mui/material/Snackbar';
 import HeartAnimation from '../heart/page';
 
+import { useApi } from "../hooks/useApi"
+import getCurrentPosition from '../hooks/usePosition';
+
 const LikeScreen = () => {
-    const [selectedTab, setSelectedTab] = useState("home"); // 'home' または 'settings'
+    const [selectedTab, setSelectedTab] = useState("home");
     const [play, setPlay] = useState(false);
     const [open, setOpen] = useState(false);
-    const [sumToken, setSumToken] = useState(0);
+    const [sumToken, setSumToken] = useState(null);
     const [surplus, setSurplus] = useState(0);
     const [intToken, setIntToken] = useState(0);
     const [lastDate, setLastDate] = useState(null);
     const [geo, setGeo] = useState({ lat: null, lon: null });
     const [placeName, setPlaceName] = useState("Tokyo");
     const [heart, setHeart] = useState(false);
+    const [user_id, setuser_id] = useState(2);
+
+    const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } = useApi(user_id, getCurrentPosition);
+
     useEffect(() => {
-        // APIを呼び出す関数
-        const fetchTotalTokens = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/api/getLikeInfo', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ taker_id: 2 })
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const responseData = await response.json(); // 応答をJSONとしてパース
-                if (responseData.length > 0) {
-                    const latestLike = responseData[0];
-                    setSumToken(latestLike.total_tokens); // total_tokens ステートをセット
-                    // @ts-ignore
-                    setLastDate(formatCreatedAt(latestLike.latest_created_at));
-                    // @ts-ignore
-                    setGeo({ lat: latestLike.latest_latitude, lon: latestLike.latest_longitude });
-                }
-            } catch (error) {
-                console.error("Fetching total tokens failed:", error);
+        // @ts-ignore
+        let intervalId;
+        if (play) {
+            intervalId = setInterval(() => {
+                console.log("send");
+                addLocation();
+                fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate, setGeo);
+            }, 15000);
+        } else {
+            console.log("not send");
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        }
+        return () => {
+            // @ts-ignore
+            if (intervalId) {
+                clearInterval(intervalId);
             }
         };
-
-        fetchTotalTokens(); // 関数を実行
-    }, []); // 空の依存配列でコンポーネントのマウント時に実行
-
-    useEffect(() => {
-        // APIを呼び出す関数
-        const fetchPlaceName = async () => {
-            if (geo.lat && geo.lon) {
-                try {
-                    const response = await fetch('http://localhost:3000/api/getPlaceName', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(geo)
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const responseData = await response.json(); // 応答をJSONとしてパース
-                    if (responseData) {
-                        setPlaceName(responseData.neighbourhood);
-                    }
-                } catch (error) {
-                    console.error("Fetching place name failed:", error);
-                }
-            }
-        };
-
-        fetchPlaceName(); // 関数を実行
-    }, [geo]); // 空の依存配列でコンポーネントのマウント時に実行
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [play]);
 
     useEffect(() => {
-        setSurplus(Math.floor(sumToken % 1 * 100));
-        setIntToken(Math.floor(sumToken));
+        fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate, setGeo);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        fetchPlaceName(geo, setPlaceName);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [geo]);
+
+    useEffect(() => {
+        setSurplus(sumToken ? Math.floor(sumToken % 1 * 100) : 0);
+        setIntToken(sumToken ? Math.floor(sumToken) : 0);
     }, [sumToken])
 
-    // @ts-ignore
-
-
-
-    // 外側の円（リング）のスタイル
     const outerRingStyle = {
         background: `conic-gradient(
             #00bfff ${surplus * 3.6}deg,
@@ -98,17 +75,13 @@ const LikeScreen = () => {
     const toggleHeart = () => {
         setHeart(true);
         setTimeout(() => {
-            setSumToken(sumToken + 0.3);
-        }, 4000); // 5秒後に heart を false に設定
-
-        setTimeout(() => {
             setHeart(false);
-        }, 10000); // 5秒後に heart を false に設定
+        }, 10000);
     };
 
     const handleClick = () => {
         setOpen(true);
-        toggleHeart();
+        likeFunction();
     };
 
     //   @ts-ignore
@@ -120,7 +93,7 @@ const LikeScreen = () => {
     };
 
     const buttonStyle = {
-        backgroundColor: '#ff69b4',  // ホットピンク
+        backgroundColor: '#ff69b4',
         color: 'white',
         padding: '10px 20px',
         borderRadius: '5px',
@@ -141,7 +114,7 @@ const LikeScreen = () => {
                 autoHideDuration={4000}
                 onClose={handleClose}
                 // message="You spread the likes around!"
-                message="You got some likes"
+                message="You spread an enn of likes!"
                 key={'top,center'}
                 sx={{
                     '& .MuiSnackbarContent-root': {
