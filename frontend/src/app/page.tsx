@@ -2,9 +2,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-export default function Page({ userid = 1 }) {
+export default function Page() {
   // const [locations, setLocations] = useState([]);
-  const [user_id, setuser_id] = useState(userid); // user_id ステートの追加
+  const [user_id, setuser_id] = useState(1); // user_id ステートの追加
 
   // useEffect(() => {
   //   fetchLocations();
@@ -16,6 +16,7 @@ export default function Page({ userid = 1 }) {
     }, 15000); // 15000ミリ秒 = 15秒
 
     return () => clearInterval(intervalId); // コンポーネントのアンマウント時にインターバルをクリア
+    // @ts-ignore
   }, [user_id]); // user_idが変更された時にもインターバルを再設定
 
   // @ts-ignore
