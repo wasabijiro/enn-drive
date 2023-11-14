@@ -6,19 +6,19 @@ export default function Page() {
   // const [locations, setLocations] = useState([]);
   const [user_id, setuser_id] = useState(1); // user_id ステートの追加
 
-  // useEffect(() => {
-  //   fetchLocations();
-  // }, []);
-
+  
   useEffect(() => {
     const intervalId = setInterval(() => {
       addLocation(); // 15秒ごとにこの関数を実行
     }, 15000); // 15000ミリ秒 = 15秒
-
+    
     return () => clearInterval(intervalId); // コンポーネントのアンマウント時にインターバルをクリア
     // @ts-ignore
   }, [user_id]); // user_idが変更された時にもインターバルを再設定
-
+  
+  // useEffect(() => {
+  //   fetchLocations();
+  // }, []);
   // @ts-ignore
   const handleuser_idChange = (event) => {
     setuser_id(event.target.value); // user_id の更新
@@ -88,7 +88,6 @@ export default function Page() {
       const position = await getCurrentPosition();
       // @ts-ignore
       const { latitude, longitude } = position.coords;
-
       await apiRequest("/api/like", {
         method: "POST",
         body: JSON.stringify({ user_id: user_id, latitude, longitude }), // user_id を使用

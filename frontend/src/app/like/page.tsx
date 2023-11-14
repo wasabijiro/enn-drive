@@ -9,46 +9,82 @@ import Snackbar from '@mui/material/Snackbar';
 import HeartAnimation from '../heart/page';
 
 const LikeScreen = () => {
-    const [selectedTab, setSelectedTab] = useState("home"); // 'home' または 'settings'
+    const [selectedTab, setSelectedTab] = useState("home");
     const [play, setPlay] = useState(false);
     const [open, setOpen] = useState(false);
-    const [sumToken, setSumToken] = useState(0);
+    const [sumToken, setSumToken] = useState(null);
     const [surplus, setSurplus] = useState(0);
     const [intToken, setIntToken] = useState(0);
     const [lastDate, setLastDate] = useState(null);
     const [geo, setGeo] = useState({ lat: null, lon: null });
     const [placeName, setPlaceName] = useState("Tokyo");
     const [heart, setHeart] = useState(false);
+    const [user_id, setuser_id] = useState(1);
+
     useEffect(() => {
-        // APIを呼び出す関数
-        const fetchTotalTokens = async () => {
-            try {
-                const response = await fetch('http://localhost:3000/api/getLikeInfo', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ taker_id: 2 })
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const responseData = await response.json(); // 応答をJSONとしてパース
-                if (responseData.length > 0) {
-                    const latestLike = responseData[0];
-                    setSumToken(latestLike.total_tokens); // total_tokens ステートをセット
-                    // @ts-ignore
-                    setLastDate(formatCreatedAt(latestLike.latest_created_at));
-                    // @ts-ignore
-                    setGeo({ lat: latestLike.latest_latitude, lon: latestLike.latest_longitude });
-                }
-            } catch (error) {
-                console.error("Fetching total tokens failed:", error);
+        // @ts-ignore
+        let intervalId;
+
+        if (play) {
+            // play が true のときだけインターバルを設定
+            intervalId = setInterval(() => {
+                console.log("send");
+                addLocation(1);
+                fetchTotalTokens(1);
+            }, 15000);
+        } else {
+            // play が false の場合は、もしインターバルが設定されていればクリアする
+            console.log("not send");
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        }
+
+        // クリーンアップ関数
+        return () => {
+            // @ts-ignore
+            if (intervalId) {
+                clearInterval(intervalId);
             }
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [play]); // play ステートが変更されるたびに効果が再実行される
 
-        fetchTotalTokens(); // 関数を実行
-    }, []); // 空の依存配列でコンポーネントのマウント時に実行
+
+    useEffect(() => {
+        fetchTotalTokens(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // @ts-ignore
+    const fetchTotalTokens = async (user_id) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/getLikeInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ taker_id: user_id })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const responseData = await response.json();
+            if (responseData.length > 0) {
+                const latestLike = responseData[0];
+                if (sumToken && sumToken != latestLike.total_tokens) {
+                    toggleHeart();
+                }
+                setSumToken(latestLike.total_tokens);
+                // @ts-ignore
+                setLastDate(formatCreatedAt(latestLike.latest_created_at));
+                // @ts-ignore
+                setGeo({ lat: latestLike.latest_latitude, lon: latestLike.latest_longitude });
+            }
+        } catch (error) {
+            console.error("Fetching total tokens failed:", error);
+        }
+    };
 
     useEffect(() => {
         // APIを呼び出す関数
@@ -75,17 +111,69 @@ const LikeScreen = () => {
             }
         };
 
-        fetchPlaceName(); // 関数を実行
-    }, [geo]); // 空の依存配列でコンポーネントのマウント時に実行
+        fetchPlaceName();
+    }, [geo]);
 
     useEffect(() => {
-        setSurplus(Math.floor(sumToken % 1 * 100));
-        setIntToken(Math.floor(sumToken));
+        setSurplus(sumToken ? Math.floor(sumToken % 1 * 100) : 0);
+        setIntToken(sumToken ? Math.floor(sumToken) : 0);
     }, [sumToken])
 
     // @ts-ignore
+    async function apiRequest(endpoint, options = {}) {
+        const response = await fetch(endpoint, {
+            headers: {
+                "Content-Type": "application/json",
+                // @ts-ignore
+                ...options.headers,
+            },
+            ...options,
+        });
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+        return response.json();
+    }
 
+    const getCurrentPosition = () => {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+    };
 
+    // @ts-ignore
+    const addLocation = async (user_id) => {
+        try {
+            const position = await getCurrentPosition();
+            // @ts-ignore
+            const { latitude, longitude } = position.coords;
+            const newLocation = await apiRequest("/api/location", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id, latitude, longitude })
+            });
+            if (!newLocation || !('id' in newLocation)) {
+                throw new Error("Invalid location data");
+            }
+        } catch (error) {
+            console.error("Error adding location: ", error);
+        }
+    };
+
+    // @ts-ignore
+    const likeFunction = async (user_id) => {
+        try {
+            const position = await getCurrentPosition();
+            // @ts-ignore
+            const { latitude, longitude } = position.coords;
+            await apiRequest("/api/like", {
+                method: "POST",
+                body: JSON.stringify({ user_id, latitude, longitude })
+            });
+        } catch (error) {
+            console.error("Error sending like: ", error);
+        }
+    };
 
     // 外側の円（リング）のスタイル
     const outerRingStyle = {
@@ -98,17 +186,13 @@ const LikeScreen = () => {
     const toggleHeart = () => {
         setHeart(true);
         setTimeout(() => {
-            setSumToken(sumToken + 0.3);
-        }, 4000); // 5秒後に heart を false に設定
-
-        setTimeout(() => {
             setHeart(false);
-        }, 10000); // 5秒後に heart を false に設定
+        }, 10000);
     };
 
     const handleClick = () => {
         setOpen(true);
-        toggleHeart();
+        likeFunction(2);
     };
 
     //   @ts-ignore
@@ -141,7 +225,7 @@ const LikeScreen = () => {
                 autoHideDuration={4000}
                 onClose={handleClose}
                 // message="You spread the likes around!"
-                message="You got some likes"
+                message="You spread an enn of likes!"
                 key={'top,center'}
                 sx={{
                     '& .MuiSnackbarContent-root': {
