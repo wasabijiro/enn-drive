@@ -8,6 +8,9 @@ import formatCreatedAt from '../utils/formatDate';
 import Snackbar from '@mui/material/Snackbar';
 import HeartAnimation from '../heart/page';
 
+import { useApi } from "../hooks/useApi"
+import getCurrentPosition from '../hooks/usePosition';
+
 const LikeScreen = () => {
     const [selectedTab, setSelectedTab] = useState("home");
     const [play, setPlay] = useState(false);
@@ -19,28 +22,25 @@ const LikeScreen = () => {
     const [geo, setGeo] = useState({ lat: null, lon: null });
     const [placeName, setPlaceName] = useState("Tokyo");
     const [heart, setHeart] = useState(false);
-    const [user_id, setuser_id] = useState(1);
+    const [user_id, setuser_id] = useState(2);
+
+    const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } = useApi(user_id, getCurrentPosition);
 
     useEffect(() => {
         // @ts-ignore
         let intervalId;
-
         if (play) {
-            // play が true のときだけインターバルを設定
             intervalId = setInterval(() => {
                 console.log("send");
-                addLocation(1);
-                fetchTotalTokens(1);
+                addLocation();
+                fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate);
             }, 15000);
         } else {
-            // play が false の場合は、もしインターバルが設定されていればクリアする
             console.log("not send");
             if (intervalId) {
                 clearInterval(intervalId);
             }
         }
-
-        // クリーンアップ関数
         return () => {
             // @ts-ignore
             if (intervalId) {
@@ -48,70 +48,15 @@ const LikeScreen = () => {
             }
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [play]); // play ステートが変更されるたびに効果が再実行される
-
+    }, [play]);
 
     useEffect(() => {
-        fetchTotalTokens(1);
+        fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // @ts-ignore
-    const fetchTotalTokens = async (user_id) => {
-        try {
-            const response = await fetch('http://localhost:3000/api/getLikeInfo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ taker_id: user_id })
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const responseData = await response.json();
-            if (responseData.length > 0) {
-                const latestLike = responseData[0];
-                if (sumToken && sumToken != latestLike.total_tokens) {
-                    toggleHeart();
-                }
-                setSumToken(latestLike.total_tokens);
-                // @ts-ignore
-                setLastDate(formatCreatedAt(latestLike.latest_created_at));
-                // @ts-ignore
-                setGeo({ lat: latestLike.latest_latitude, lon: latestLike.latest_longitude });
-            }
-        } catch (error) {
-            console.error("Fetching total tokens failed:", error);
-        }
-    };
-
     useEffect(() => {
-        // APIを呼び出す関数
-        const fetchPlaceName = async () => {
-            if (geo.lat && geo.lon) {
-                try {
-                    const response = await fetch('http://localhost:3000/api/getPlaceName', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(geo)
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const responseData = await response.json(); // 応答をJSONとしてパース
-                    if (responseData) {
-                        setPlaceName(responseData.neighbourhood);
-                    }
-                } catch (error) {
-                    console.error("Fetching place name failed:", error);
-                }
-            }
-        };
-
-        fetchPlaceName();
+        fetchPlaceName(geo, setPlaceName);
     }, [geo]);
 
     useEffect(() => {
@@ -119,63 +64,6 @@ const LikeScreen = () => {
         setIntToken(sumToken ? Math.floor(sumToken) : 0);
     }, [sumToken])
 
-    // @ts-ignore
-    async function apiRequest(endpoint, options = {}) {
-        const response = await fetch(endpoint, {
-            headers: {
-                "Content-Type": "application/json",
-                // @ts-ignore
-                ...options.headers,
-            },
-            ...options,
-        });
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
-        return response.json();
-    }
-
-    const getCurrentPosition = () => {
-        return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-    };
-
-    // @ts-ignore
-    const addLocation = async (user_id) => {
-        try {
-            const position = await getCurrentPosition();
-            // @ts-ignore
-            const { latitude, longitude } = position.coords;
-            const newLocation = await apiRequest("/api/location", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id, latitude, longitude })
-            });
-            if (!newLocation || !('id' in newLocation)) {
-                throw new Error("Invalid location data");
-            }
-        } catch (error) {
-            console.error("Error adding location: ", error);
-        }
-    };
-
-    // @ts-ignore
-    const likeFunction = async (user_id) => {
-        try {
-            const position = await getCurrentPosition();
-            // @ts-ignore
-            const { latitude, longitude } = position.coords;
-            await apiRequest("/api/like", {
-                method: "POST",
-                body: JSON.stringify({ user_id, latitude, longitude })
-            });
-        } catch (error) {
-            console.error("Error sending like: ", error);
-        }
-    };
-
-    // 外側の円（リング）のスタイル
     const outerRingStyle = {
         background: `conic-gradient(
             #00bfff ${surplus * 3.6}deg,
@@ -192,7 +80,7 @@ const LikeScreen = () => {
 
     const handleClick = () => {
         setOpen(true);
-        likeFunction(2);
+        likeFunction();
     };
 
     //   @ts-ignore
@@ -204,7 +92,7 @@ const LikeScreen = () => {
     };
 
     const buttonStyle = {
-        backgroundColor: '#ff69b4',  // ホットピンク
+        backgroundColor: '#ff69b4',
         color: 'white',
         padding: '10px 20px',
         borderRadius: '5px',
