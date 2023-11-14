@@ -14,6 +14,8 @@ import style from "@/app/styles/login.module.css";
 import { styles } from "@/app/styles";
 import googleAnimationData from "@/components/interface/animations/google.json";
 import { useLottie } from "@/utils/useLottie";
+import { suiClient } from "@/config/sui";
+import { getOwnedCocoObjectId } from "@/utils/getObject";
 
 export default function Home() {
   const router = useRouter();
@@ -32,6 +34,22 @@ export default function Home() {
     if (account) {
       zkLoginSetup.completeZkLogin(account);
     }
+    const getObject = async () => {
+      const obj_id = await getOwnedCocoObjectId(
+        "0x96fc41bb935336e9ece2f894518b47da0ad5318f6064a912fe0daede453f2f8c"
+      );
+
+      const field: any = await suiClient.getObject({
+        id: obj_id,
+        options: {
+          showContent: true,
+          showType: true,
+        },
+      });
+
+      console.log({ field });
+    };
+    getObject();
   }, []);
 
   // https://docs.sui.io/build/zk_login#set-up-oauth-flow

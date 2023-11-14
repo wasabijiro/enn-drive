@@ -16,6 +16,18 @@ cd frontend
 npm run build
 '''
 
+[tasks."install:gen"]
+script = '''
+cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
+'''
+
+[tasks."gen:sui"]
+script = '''
+cd frontend/
+bun run gen:sui
+bun run lint
+'''
+
 [tasks."sui:build"]
 script = '''
 cd contract
