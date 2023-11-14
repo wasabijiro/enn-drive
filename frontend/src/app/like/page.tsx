@@ -33,7 +33,7 @@ const LikeScreen = () => {
             intervalId = setInterval(() => {
                 console.log("send");
                 addLocation();
-                fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate);
+                fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate, setGeo);
             }, 15000);
         } else {
             console.log("not send");
@@ -51,12 +51,13 @@ const LikeScreen = () => {
     }, [play]);
 
     useEffect(() => {
-        fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate);
+        fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate, setGeo);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         fetchPlaceName(geo, setPlaceName);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [geo]);
 
     useEffect(() => {

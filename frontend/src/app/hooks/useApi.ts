@@ -1,5 +1,7 @@
 // hooks/useApi.ts
 
+import formatCreatedAt from "../utils/formatDate";
+
 // @ts-ignore
 export const useApi = (user_id, getCurrentPosition) => {
     // @ts-ignore
@@ -49,7 +51,7 @@ export const useApi = (user_id, getCurrentPosition) => {
         }
     };
     // @ts-ignore
-    const fetchTotalTokens = async (sumToken, toggleHeart, setSumToken,setLastDate) => {
+    const fetchTotalTokens = async (sumToken, toggleHeart, setSumToken,setLastDate,setGeo) => {
         try {
             const response = await fetch('http://localhost:3000/api/getLikeInfo', {
                 method: 'POST',
