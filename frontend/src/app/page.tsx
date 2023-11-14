@@ -16,6 +16,7 @@ export default function Page() {
     }, 15000); // 15000ミリ秒 = 15秒
 
     return () => clearInterval(intervalId); // コンポーネントのアンマウント時にインターバルをクリア
+    // @ts-ignore
   }, [user_id]); // user_idが変更された時にもインターバルを再設定
 
   // @ts-ignore

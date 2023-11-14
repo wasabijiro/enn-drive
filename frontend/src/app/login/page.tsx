@@ -68,25 +68,31 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen justify-center items-center relative">
-      <div id="login-buttons" className="section mb-8 flex items-center justify-center">
-        {openIdProviders.map((provider) => (
-          <button
-            className={`btn-login text-black font-bold py-1 px-10 rounded border-[2px] border-gray-300 ${provider} mt-5`}
-            onClick={() => {
-              beginZkLogin(provider);
-            }}
-            key={provider}
-          >
-            <div className="flex items-center">
-              <div
-                className="max-w-[50px]"
-                ref={googleAnimationContainer}
-              ></div>
-              <div className="mr-5 text-lg">Login with {provider}</div>
-            </div>
-          </button>
-        ))}
+    <div className="flex justify-center items-center h-screen bg-gray-100 px-3">
+      <div className="p-6 max-w-sm w-90 bg-white shadow-md rounded-md">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img alt="" src={"/like.png"} />
+        <h1 className="text-xl font-bold text-center mb-1 mt-2">enn-Drive</h1>
+        <p className="text-center mb-2 font-bold">Drive Safe, Earn Likes.</p>
+        <div id="login-buttons" className="section mb-2 flex items-center justify-center">
+          {openIdProviders.map((provider) => (
+            <button
+              className={`btn-login text-black font-bold py-1 px-10 rounded border-[2px] border-gray-300 ${provider}`}
+              onClick={() => {
+                beginZkLogin(provider);
+              }}
+              key={provider}
+            >
+              <div className="flex items-center">
+                <div
+                  className="max-w-[50px]"
+                  ref={googleAnimationContainer}
+                ></div>
+                <div className="mr-5 text-lg">Login with {provider}</div>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
