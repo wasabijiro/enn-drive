@@ -31,3 +31,21 @@ export const moveCallMintNft = (
     url: props.url,
   });
 };
+
+export function callLike(txb: TransactionBlock, args: any) {
+  return txb.moveCall({
+    target: `${PACKAGE_ID}::issuer::mint`,
+    arguments: [txb.pure(args.id)],
+  });
+}
+
+export const moveCallLike = (
+  txb: TransactionBlock,
+  props: {
+    id: string;
+  }
+) => {
+  callMint(txb, {
+    id: props.id,
+  });
+};

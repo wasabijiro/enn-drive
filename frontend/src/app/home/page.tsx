@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { Account, OpenIdProvider } from "@/types";
 import { useZkLoginSetup } from "@/libs/store/zkLogin";
-import { moveCallSponsored } from "@/libs/sponsoredZkLogin";
+import { moveCallSponsoredMint } from "@/libs/sponsoredZkLogin";
 import { shortenAddress } from "@/utils";
 import { ZKLOGIN_ACCONTS } from "@/config";
 import { NETWORK } from "@/config/sui";
@@ -120,7 +120,7 @@ export default function Home() {
             console.log("account", account);
             console.log(zkLoginSetup.userAddr);
             const txb = new TransactionBlock();
-            const result = await moveCallSponsored(txb, account);
+            const result = await moveCallSponsoredMint(txb, account);
             console.log(result.effects?.status.status);
             if (result.effects?.status.status === "success") {
               setDigest(result.digest);

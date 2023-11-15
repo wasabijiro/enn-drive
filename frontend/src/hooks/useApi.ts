@@ -3,7 +3,7 @@
 import formatCreatedAt from "@/utils/formatDate";
 
 // @ts-ignore
-export const useApi = (user_id, getCurrentPosition) => {
+export const useApi = (user_id, getCurrentPosition, account) => {
   // @ts-ignore
   const apiRequest = async (endpoint, options) => {
     const response = await fetch(endpoint, {
@@ -44,7 +44,7 @@ export const useApi = (user_id, getCurrentPosition) => {
       const { latitude, longitude } = position.coords;
       await apiRequest("/api/like", {
         method: "POST",
-        body: JSON.stringify({ user_id, latitude, longitude }),
+        body: JSON.stringify({ user_id, latitude, longitude, account }),
       });
     } catch (error) {
       console.error("Error sending like: ", error);
