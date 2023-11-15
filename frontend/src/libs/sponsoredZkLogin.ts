@@ -12,9 +12,8 @@ export const moveCallSponsored = async (
 ) => {
   txb.setSender(account.userAddr);
   moveCallMintNft(txb, {
-    event_key: "movejp10",
-    name: "Sui Meetup POAP",
-    description: "Sui Japan Community Event Attendance NFT",
+    name: "Mazda Drive NFT",
+    description: "Web3 Global Hackathon for Mazda",
     url: "ipfs://bafybeiez4cq7ixp6h2fgzlzl2223t4pdydl6udxefxy4lxairivszceptm",
   });
   const payloadBytes = await txb.build({

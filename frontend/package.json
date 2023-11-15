@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "gen:sui": "sui-client-gen -m sui-client-gen.toml -o src/libs/moveCall",
+    "lint": "eslint ./src --fix -c .eslintrc.js --ext js,ts,jsx,tsx --ignore-pattern='!.*'"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
