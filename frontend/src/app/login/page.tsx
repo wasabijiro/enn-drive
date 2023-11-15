@@ -6,14 +6,15 @@ import { useEffect, useState } from "react";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { Account, OpenIdProvider } from "@/types";
 import { useZkLoginSetup } from "@/libs/store/zkLogin";
-import { moveCallSponsored } from "@/libs/sponsoredZkLogin";
+import { moveCallSponsoredMint } from "@/libs/sponsoredZkLogin";
 import { shortenAddress } from "@/utils";
-import { ZKLOGIN_ACCONTS } from "@/config";
+import { ZKLOGIN_ACCONTS, NFT_INDEX_ID } from "@/config";
 import { NETWORK } from "@/config/sui";
 import style from "@/styles/login.module.css";
 import { styles } from "@/styles";
 import googleAnimationData from "@/components/interface/animations/google.json";
 import { useLottie } from "@/utils/useLottie";
+import { suiClient } from "@/config/sui";
 
 export default function Home() {
   const router = useRouter();
@@ -32,6 +33,17 @@ export default function Home() {
   const zkLoginSetup = useZkLoginSetup();
 
   useEffect(() => {
+    const func = async () => {
+      const suiObject = await suiClient.getObject({
+        id: NFT_INDEX_ID,
+        options: {
+          showContent: true,
+          showType: true,
+        },
+      });
+      console.log({ suiObject });
+    };
+    func();
     if (account) {
       zkLoginSetup.completeZkLogin(account);
     }
