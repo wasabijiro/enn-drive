@@ -64,7 +64,7 @@ export const useApi = (user_id, getCurrentPosition, account) => {
     setGeo
   ) => {
     try {
-      const response = await fetch("http://localhost:3000/api/getLikeInfo", {
+      const response = await fetch(`${process.env.ROUTE_ADDRESS}/api/getLikeInfo`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export const useApi = (user_id, getCurrentPosition, account) => {
   const fetchPlaceName = async (geo, setPlaceName) => {
     if (geo.lat && geo.lon) {
       try {
-        const response = await fetch("http://localhost:3000/api/getPlaceName", {
+        const response = await fetch(`${process.env.ROUTE_ADDRESS}/api/getPlaceName`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
