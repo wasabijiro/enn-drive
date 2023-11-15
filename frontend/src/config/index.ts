@@ -9,10 +9,10 @@ export const openIdProviders: OpenIdProvider[] = [
 ];
 
 export const PACKAGE_ID =
-  "0x49485ac54a0a889a387bda7aede26b4bf22e4a4cd4a4f39dd6dab2af4f182164";
+  "0x785d53e54f8f541d776de7a89d5739b750a8f23721098d05e0d1fc8362c818af";
 
 export const NFT_INDEX_ID =
-  "0x288ecf868475733935eff7a09b3b41676a606fee7c0d77bb3782cd2507c72547";
+  "0x508e5840ae78d402e9136b835dca99e0b8dc91726c22ceb139f9b05d4d78c9c5";
 
 export const CLOCK_ID = "0x6";
 

@@ -24,8 +24,8 @@ cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
 [tasks."gen:sui"]
 script = '''
 cd frontend/
-bun run gen:sui
-bun run lint
+npm run gen:sui
+npm run lint
 '''
 
 [tasks."sui:build"]
@@ -43,13 +43,14 @@ sui client publish --gas-budget 123456789 --skip-dependency-verification
 [tasks."sui:mint"]
 script = '''
 cd contract
-PACKAGE=0x49485ac54a0a889a387bda7aede26b4bf22e4a4cd4a4f39dd6dab2af4f182164
+PACKAGE=0x785d53e54f8f541d776de7a89d5739b750a8f23721098d05e0d1fc8362c818af
+NFT_INDEX=0x508e5840ae78d402e9136b835dca99e0b8dc91726c22ceb139f9b05d4d78c9c5
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function mint \
     --args \
-        0x288ecf868475733935eff7a09b3b41676a606fee7c0d77bb3782cd2507c72547 \
+        $NFT_INDEX \
         0x6 \
         "Mazda Drive NFT" \
         "Web3 Global Hackathon for Mazda" \
@@ -61,11 +62,12 @@ sui client call \
 script = '''
 cd contract
 PACKAGE=0x49485ac54a0a889a387bda7aede26b4bf22e4a4cd4a4f39dd6dab2af4f182164
+NFT_ID=0x82902f562d65709d5e68e4b94c6523f1ed0d34e5a406ef6fdda4db03dbc940b5
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function like \
     --args \
-        0x82902f562d65709d5e68e4b94c6523f1ed0d34e5a406ef6fdda4db03dbc940b5 \
+        $NFT_ID \
     --gas-budget 123456789
 '''
