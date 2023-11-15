@@ -87,13 +87,22 @@ const LikeScreen = () => {
     setSurplus(sumToken ? Math.floor((sumToken % 1) * 100) : 0);
     setIntToken(sumToken ? Math.floor(sumToken) : 0);
   }, [sumToken]);
-
-  const outerRingStyle = {
-    background: `conic-gradient(
-            #00bfff ${surplus * 3.6}deg,
-            transparent ${surplus * 3.6}deg 360deg
+  const styles = {
+    outerRingStyle: {
+      background: `conic-gradient(
+        #00bfff ${surplus * 3.6}deg,
+        transparent ${surplus * 3.6}deg 360deg
         )`,
-  };
+    },
+    buttonStyle: {
+      backgroundColor: "#ff69b4",
+      color: "white",
+      padding: "10px 20px",
+      borderRadius: "5px",
+      border: "none",
+      cursor: "pointer",
+    },
+  }
 
   const toggleHeart = () => {
     setHeart(true);
@@ -115,14 +124,6 @@ const LikeScreen = () => {
     setOpen(false);
   };
 
-  const buttonStyle = {
-    backgroundColor: "#ff69b4",
-    color: "white",
-    padding: "10px 20px",
-    borderRadius: "5px",
-    border: "none",
-    cursor: "pointer",
-  };
 
   const togglePlay = () => {
     setPlay(!play);
@@ -151,7 +152,7 @@ const LikeScreen = () => {
           <div className="relative w-64 h-64">
             <div
               className="w-full h-full rounded-full shadow-md"
-              style={outerRingStyle}
+              style={styles.outerRingStyle}
             ></div>
             <div className="absolute top-2 left-2 w-60 h-60 bg-white rounded-full flex items-center justify-center">
               <div>
@@ -169,9 +170,8 @@ const LikeScreen = () => {
         </div>
         <div className="flex justify-center mt-4">
           <button
-            className={`text-slate-50 w-12 h-12 justify-center align-center me-5 rounded-full ${
-              !play ? "bg-green-500" : "bg-red-500"
-            }`}
+            className={`text-slate-50 w-12 h-12 justify-center align-center me-5 rounded-full ${!play ? "bg-green-500" : "bg-red-500"
+              }`}
             onClick={togglePlay}
           >
             {!play ? (
@@ -180,7 +180,7 @@ const LikeScreen = () => {
               <FontAwesomeIcon icon={faStop} size={"xl"} />
             )}
           </button>
-          <button style={buttonStyle} onClick={handleClick} className="h-12">
+          <button style={styles.buttonStyle} onClick={handleClick} className="h-12">
             <span className="font-extrabold text-lg">Like</span>
             <FontAwesomeIcon icon={faHeart} className="ms-2" size={"xl"} />
           </button>
@@ -190,27 +190,24 @@ const LikeScreen = () => {
       <div id="navbar" className="fixed bottom-0 left-0 right-0">
         <div className="bg-gray-800 text-white flex justify-evenly">
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
-              selectedTab === "home" ? "bg-gray-700" : ""
-            }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "home" ? "bg-gray-700" : ""
+              }`}
             onClick={() => setSelectedTab("home")}
           >
             <FontAwesomeIcon icon={faHouse} size={"xl"} className="mb-1" />
             <span className="text-xs">Home</span>
           </button>
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
-              selectedTab === "trophy" ? "bg-gray-700" : ""
-            }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "trophy" ? "bg-gray-700" : ""
+              }`}
             onClick={() => setSelectedTab("trophy")}
           >
             <FontAwesomeIcon icon={faTrophy} size={"xl"} className="mb-1" />
             <span className="text-xs">Trophy</span>
           </button>
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
-              selectedTab === "settings" ? "bg-gray-700" : ""
-            }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "settings" ? "bg-gray-700" : ""
+              }`}
             onClick={() => setSelectedTab("settings")}
           >
             <FontAwesomeIcon icon={faGear} size={"xl"} className="mb-1" />
