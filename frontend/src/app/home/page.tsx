@@ -132,6 +132,7 @@ export default function Home() {
                 setErr("Double Mint rejected...");
                 throw new Error("objectType not found");
               }
+              router.push(`/like`);
             } else {
               // setErr(`Transaction Failed: ${result.effects?.status.error}`);
               setErr("Transaction Failed...");
