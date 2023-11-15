@@ -30,7 +30,7 @@ const LikeScreen = () => {
   const [geo, setGeo] = useState({ lat: null, lon: null });
   const [placeName, setPlaceName] = useState("Tokyo");
   const [heart, setHeart] = useState(false);
-  const [user_id, setuser_id] = useState(2);
+  const [user_id, setuser_id] = useState("2");
 
   const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } =
     useApi(user_id, getCurrentPosition);
