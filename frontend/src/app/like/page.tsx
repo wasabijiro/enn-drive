@@ -8,6 +8,7 @@ import {
   faStop,
   faTrophy,
 } from "@fortawesome/free-solid-svg-icons";
+import { useZkLoginSetup } from "@/libs/store/zkLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 
@@ -30,10 +31,11 @@ const LikeScreen = () => {
   const [geo, setGeo] = useState({ lat: null, lon: null });
   const [placeName, setPlaceName] = useState("Tokyo");
   const [heart, setHeart] = useState(false);
-  const [user_id, setuser_id] = useState(2);
+  const [user_id, setuser_id] = useState<string | null>(null);
+  const zkLoginSetup = useZkLoginSetup();
 
   const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } =
-    useApi(user_id, getCurrentPosition);
+    useApi(user_id, getCurrentPosition, zkLoginSetup.account);
 
   useEffect(() => {
     // @ts-ignore
@@ -66,6 +68,12 @@ const LikeScreen = () => {
   }, [play]);
 
   useEffect(() => {
+    console.log("b");
+    console.log(zkLoginSetup.userAddr);
+    if (zkLoginSetup.userAddr) {
+      console.log("a");
+      setuser_id(zkLoginSetup.userAddr);
+    }
     fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate, setGeo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

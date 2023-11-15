@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { Account, OpenIdProvider } from "@/types";
 import { useZkLoginSetup } from "@/libs/store/zkLogin";
-import { moveCallSponsored } from "@/libs/sponsoredZkLogin";
+import { moveCallSponsoredMint } from "@/libs/sponsoredZkLogin";
 import { shortenAddress } from "@/utils";
 import { ZKLOGIN_ACCONTS, openIdProviders } from "@/config";
 import { NETWORK } from "@/config/sui";

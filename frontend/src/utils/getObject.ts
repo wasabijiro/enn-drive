@@ -1,6 +1,6 @@
 import { suiClient } from "@/config/sui";
 
-export async function getOwnedCocoObjectId(
+export async function getOwnedDriveObjectId(
   address: string,
   objectType: string
 ) {
