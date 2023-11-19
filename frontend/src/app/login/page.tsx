@@ -8,7 +8,7 @@ import { Account, OpenIdProvider } from "@/types";
 import { useZkLoginSetup } from "@/libs/store/zkLogin";
 import { moveCallSponsoredMint } from "@/libs/sponsoredZkLogin";
 import { shortenAddress } from "@/utils";
-import { ZKLOGIN_ACCONTS, NFT_INDEX_ID } from "@/config";
+import { ZKLOGIN_ACCONTS } from "@/config";
 import { NETWORK } from "@/config/sui";
 import style from "@/styles/login.module.css";
 import { styles } from "@/styles";
@@ -33,17 +33,6 @@ export default function Home() {
   const zkLoginSetup = useZkLoginSetup();
 
   useEffect(() => {
-    const func = async () => {
-      const suiObject = await suiClient.getObject({
-        id: NFT_INDEX_ID,
-        options: {
-          showContent: true,
-          showType: true,
-        },
-      });
-      console.log({ suiObject });
-    };
-    func();
     if (account) {
       zkLoginSetup.completeZkLogin(account);
     }

@@ -9,10 +9,12 @@ export const openIdProviders: OpenIdProvider[] = [
 ];
 
 export const PACKAGE_ID =
-  "0xa067e65a0aed7163ed142543ad84eff0e8a879cd6b2b6a281530439d851c1739";
+  "0xe1c9b12afeb4df71a08013d8f06cdbe58cd48cdd9e159949af09b029fef22266";
 
 export const NFT_INDEX_ID =
   "0x89ba4a352f8aee8c353988258c20130b5ac4513f6c8f8f7df73a1b746af01fda";
+
+export const NFT_TYPE = `${PACKAGE_ID}::issuer::DriveNFTId`;
 
 export const CLOCK_ID = "0x6";
 

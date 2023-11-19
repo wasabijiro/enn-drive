@@ -8,7 +8,7 @@ export function callMint(txb: TransactionBlock, args: any) {
   return txb.moveCall({
     target: `${PACKAGE_ID}::issuer::mint`,
     arguments: [
-      txb.pure(NFT_INDEX_ID),
+      // txb.pure(NFT_INDEX_ID),
       txb.pure(CLOCK_ID),
       txb.pure(args.name),
       txb.pure(args.description),

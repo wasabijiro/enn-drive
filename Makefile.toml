@@ -43,14 +43,12 @@ sui client publish --gas-budget 123456789 --skip-dependency-verification
 [tasks."sui:mint"]
 script = '''
 cd contract
-PACKAGE=0x7e57ad667daf1ba82d8cc82b583cce57a71f187fd47d2099271cbf28d8a0e07f
-NFT_INDEX=0x7acecf98813826f3820366ec2ba8d38262fb29f679fc2c33dbc6629526ecb560
+PACKAGE=0xc8129a410f3ca9b020261bddeefbe5ebb74eb7acb06bf6abbbd2a390db557cf4
 sui client call \
     --package $PACKAGE \
     --module issuer \
     --function mint \
     --args \
-        $NFT_INDEX \
         0x6 \
         "Mazda Drive NFT" \
         "Web3 Global Hackathon for Mazda" \
@@ -61,8 +59,8 @@ sui client call \
 [tasks."sui:like"]
 script = '''
 cd contract
-PACKAGE=0x7e57ad667daf1ba82d8cc82b583cce57a71f187fd47d2099271cbf28d8a0e07f
-NFT_ID=0x3a8c4ef033de4d87c7774bd0542b4de174596f4f86aec65bce9d9d861c9b379c
+PACKAGE=0x8ec4fdebf532ef2c2f1dbfa4696291688e48a8b3ee78fa41ebfbe507fc166e94
+NFT_ID=0x38ed9a601aab186bbc18be01f9cac3ccf06d24050ed8c00668064e9c86a12f2c
 sui client call \
     --package $PACKAGE \
     --module issuer \
