@@ -13,7 +13,7 @@ module enn::issuer {
 
     use enn::nft::{Self, DriveNFT};
 
-    struct DriveNFTIndex has key, store {
+    struct DriveNFTId has key, store {
         id: UID,
         // table: Table<address, ID>,
         // bag: Bag,
@@ -29,16 +29,16 @@ module enn::issuer {
     }
 
     fun init(ctx: &mut TxContext) {
-        // let index = DriveNFTIndex {
+        // let id = DriveNFTId {
         //     id: object::new(ctx),
         //     table: table::new<address, ID>(ctx),
         //     bag: bag::new(ctx)
         // };
-        // transfer::share_object(index);
+        // transfer::share_object(id);
     }
 
     public entry fun mint(
-        // index: &mut DriveNFTIndex,
+        // id: &mut DriveNFTId,
         clock: &Clock,
         name: String,
         description: String,
@@ -49,14 +49,14 @@ module enn::issuer {
         df::add(nft::uid_mut_as_owner(&mut nft), count_key(), 0);
         df::add(nft::uid_mut_as_owner(&mut nft), liked_key(), vector::empty<address>());
         // df::add(nft::uid_mut_as_owner(&mut nft), liked_key(), vec_set::empty<address>());
-        // table::add(&mut index.table, tx_context::sender(ctx), object::id(&nft));
-        // bag::add(&mut index.bag, tx_context::sender(ctx), object::id(&nft));
-        let index = DriveNFTIndex {
+        // table::add(&mut id.table, tx_context::sender(ctx), object::id(&nft));
+        // bag::add(&mut id.bag, tx_context::sender(ctx), object::id(&nft));
+        let id = DriveNFTId {
             id: object::new(ctx),
             nft: object::id(&nft)
         };
         transfer::public_share_object(nft);
-        transfer::public_transfer(index, tx_context::sender(ctx));
+        transfer::public_transfer(id, tx_context::sender(ctx));
     }
 
     public entry fun like(
