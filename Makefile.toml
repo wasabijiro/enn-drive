@@ -43,8 +43,7 @@ sui client publish --gas-budget 123456789 --skip-dependency-verification
 [tasks."sui:mint"]
 script = '''
 cd contract
-PACKAGE=0x8ec4fdebf532ef2c2f1dbfa4696291688e48a8b3ee78fa41ebfbe507fc166e94
-NFT_INDEX=0x120acb7070ced9626a19dea4ad167dad9aca85438291604976519d1ce885a1cb
+PACKAGE=0xc8129a410f3ca9b020261bddeefbe5ebb74eb7acb06bf6abbbd2a390db557cf4
 sui client call \
     --package $PACKAGE \
     --module issuer \

@@ -1,8 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
-import { driveObjectType } from "@/config";
+import { NFT_TYPE } from "@/config";
 import { getOwnedDriveObjectId } from "@/utils/getObject";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { moveCallSponsoredLike } from "@/libs/sponsoredZkLogin";
+import { suiClient } from "@/config/sui";
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -36,13 +37,23 @@ export async function POST(req) {
     for (const user of nearbyUsers) {
       console.log(user);
       if (user.user_id !== user_id) {
-        const obj_id = await getOwnedDriveObjectId(
-          user.user_id,
-          driveObjectType
-        );
+        const obj_id = await getOwnedDriveObjectId(user.user_id, NFT_TYPE);
+        const field: any = await suiClient.getObject({
+          id: obj_id,
+          options: {
+            showContent: true,
+            showType: true,
+          },
+        });
+
+        console.log({ field });
+
+        const nft_id = field.data?.content.fields.nft;
+
+        console.log({ nft_id });
 
         const txb = new TransactionBlock();
-        const result = await moveCallSponsoredLike(txb, account, obj_id);
+        const result = await moveCallSponsoredLike(txb, account, nft_id);
         console.log(result.effects?.status.status);
 
         const likeData = {
@@ -78,6 +89,7 @@ export async function POST(req) {
       }
     );
   } catch (error) {
+    console.log({ error });
     // @ts-ignore
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
