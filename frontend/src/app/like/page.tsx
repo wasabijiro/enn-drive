@@ -11,6 +11,9 @@ import {
 import { useZkLoginSetup } from "@/libs/store/zkLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
+import { suiClient } from "@/config/sui";
+import { getOwnedDriveObjectId } from "@/utils/getObject";
+import { NFT_TYPE } from "@/config";
 
 import formatCreatedAt from "@/utils/formatDate";
 
@@ -74,6 +77,26 @@ const LikeScreen = () => {
       console.log("a");
       setuser_id(zkLoginSetup.userAddr);
     }
+    const get_id = async () => {
+      const obj_id = await getOwnedDriveObjectId(
+        zkLoginSetup.userAddr,
+        NFT_TYPE
+      );
+      const field: any = await suiClient.getObject({
+        id: obj_id,
+        options: {
+          showContent: true,
+          showType: true,
+        },
+      });
+
+      console.log({ field });
+
+      const nft_id = field.data?.content.fields.nft;
+
+      console.log({ nft_id });
+    };
+    get_id();
     fetchTotalTokens(sumToken, toggleHeart, setSumToken, setLastDate, setGeo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -102,7 +125,7 @@ const LikeScreen = () => {
       border: "none",
       cursor: "pointer",
     },
-  }
+  };
 
   const toggleHeart = () => {
     setHeart(true);
@@ -123,7 +146,6 @@ const LikeScreen = () => {
     }
     setOpen(false);
   };
-
 
   const togglePlay = () => {
     setPlay(!play);
@@ -170,8 +192,9 @@ const LikeScreen = () => {
         </div>
         <div className="flex justify-center mt-4">
           <button
-            className={`text-slate-50 w-12 h-12 justify-center align-center me-5 rounded-full ${!play ? "bg-green-500" : "bg-red-500"
-              }`}
+            className={`text-slate-50 w-12 h-12 justify-center align-center me-5 rounded-full ${
+              !play ? "bg-green-500" : "bg-red-500"
+            }`}
             onClick={togglePlay}
           >
             {!play ? (
@@ -180,7 +203,11 @@ const LikeScreen = () => {
               <FontAwesomeIcon icon={faStop} size={"xl"} />
             )}
           </button>
-          <button style={styles.buttonStyle} onClick={handleClick} className="h-12">
+          <button
+            style={styles.buttonStyle}
+            onClick={handleClick}
+            className="h-12"
+          >
             <span className="font-extrabold text-lg">Like</span>
             <FontAwesomeIcon icon={faHeart} className="ms-2" size={"xl"} />
           </button>
@@ -190,24 +217,27 @@ const LikeScreen = () => {
       <div id="navbar" className="fixed bottom-0 left-0 right-0">
         <div className="bg-gray-800 text-white flex justify-evenly">
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "home" ? "bg-gray-700" : ""
-              }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
+              selectedTab === "home" ? "bg-gray-700" : ""
+            }`}
             onClick={() => setSelectedTab("home")}
           >
             <FontAwesomeIcon icon={faHouse} size={"xl"} className="mb-1" />
             <span className="text-xs">Home</span>
           </button>
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "trophy" ? "bg-gray-700" : ""
-              }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
+              selectedTab === "trophy" ? "bg-gray-700" : ""
+            }`}
             onClick={() => setSelectedTab("trophy")}
           >
             <FontAwesomeIcon icon={faTrophy} size={"xl"} className="mb-1" />
             <span className="text-xs">Trophy</span>
           </button>
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "settings" ? "bg-gray-700" : ""
-              }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
+              selectedTab === "settings" ? "bg-gray-700" : ""
+            }`}
             onClick={() => setSelectedTab("settings")}
           >
             <FontAwesomeIcon icon={faGear} size={"xl"} className="mb-1" />

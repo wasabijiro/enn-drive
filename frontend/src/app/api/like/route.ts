@@ -1,3 +1,4 @@
+// frontend/src/app/api/like/route.ts
 import { createClient } from "@supabase/supabase-js";
 import { NFT_TYPE } from "@/config";
 import { getOwnedDriveObjectId } from "@/utils/getObject";
@@ -14,6 +15,23 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export async function POST(req) {
   try {
     const { user_id, latitude, longitude, account } = await req.json();
+
+    console.log({ user_id });
+
+    const obj_id = await getOwnedDriveObjectId(user_id, NFT_TYPE);
+    const field: any = await suiClient.getObject({
+      id: obj_id,
+      options: {
+        showContent: true,
+        showType: true,
+      },
+    });
+
+    console.log({ field });
+
+    const nft_id = field.data?.content.fields.nft;
+
+    console.log({ nft_id });
 
     console.log("nearbyUsers1");
     const nearbyResponse = await fetch(
