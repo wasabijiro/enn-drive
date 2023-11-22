@@ -16,9 +16,26 @@ export async function POST(req) {
   try {
     const { user_id, latitude, longitude, account } = await req.json();
 
+    console.log({ user_id });
+
+    const obj_id = await getOwnedDriveObjectId(user_id, NFT_TYPE);
+    const field: any = await suiClient.getObject({
+      id: obj_id,
+      options: {
+        showContent: true,
+        showType: true,
+      },
+    });
+
+    console.log({ field });
+
+    const nft_id = field.data?.content.fields.nft;
+
+    console.log({ nft_id });
+
     console.log("nearbyUsers1");
     const nearbyResponse = await fetch(
-      `${process.env.ROUTE_ADDRESS}/api/getNearbyLocations`,
+      "http://localhost:3000/api/getNearbyLocations",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -66,14 +83,11 @@ export async function POST(req) {
           density: 1,
         };
 
-        const response = await fetch(
-          `${process.env.ROUTE_ADDRESS}/api/insertlike`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(likeData),
-          }
-        );
+        const response = await fetch("http://localhost:3000/api/insertlike", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(likeData),
+        });
 
         if (!response.ok) {
           console.error("Error sending like: ", response.statusText);
