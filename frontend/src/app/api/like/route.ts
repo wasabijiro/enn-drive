@@ -17,7 +17,7 @@ export async function POST(req) {
 
     console.log("nearbyUsers1");
     const nearbyResponse = await fetch(
-      "http://localhost:3000/api/getNearbyLocations",
+      `${process.env.ROUTE_ADDRESS}/api/getNearbyLocations`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,7 +65,7 @@ export async function POST(req) {
           density: 1,
         };
 
-        const response = await fetch("http://localhost:3000/api/insertlike", {
+        const response = await fetch(`${process.env.ROUTE_ADDRESS}/api/insertlike`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(likeData),
