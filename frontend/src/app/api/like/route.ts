@@ -1,3 +1,4 @@
+// frontend/src/app/api/like/route.ts
 import { createClient } from "@supabase/supabase-js";
 import { NFT_TYPE } from "@/config";
 import { getOwnedDriveObjectId } from "@/utils/getObject";
@@ -65,11 +66,14 @@ export async function POST(req) {
           density: 1,
         };
 
-        const response = await fetch(`${process.env.ROUTE_ADDRESS}/api/insertlike`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(likeData),
-        });
+        const response = await fetch(
+          `${process.env.ROUTE_ADDRESS}/api/insertlike`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(likeData),
+          }
+        );
 
         if (!response.ok) {
           console.error("Error sending like: ", response.statusText);
