@@ -35,8 +35,7 @@ const LikeScreen = () => {
   const zkLoginSetup = useZkLoginSetup();
 
   const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } =
-    useApi(user_id, getCurrentPosition, zkLoginSetup.account);
-
+    useApi(user_id, getCurrentPosition);
   useEffect(() => {
     // @ts-ignore
     let intervalId;
@@ -65,6 +64,7 @@ const LikeScreen = () => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [play]);
 
   useEffect(() => {

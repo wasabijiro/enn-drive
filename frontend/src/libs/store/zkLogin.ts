@@ -157,7 +157,7 @@ const getLoginUrl = (props: { provider: OpenIdProvider; nonce: string }) => {
       // redirect_uri: REDIRECT_URI,
       redirect_uri: `${REDIRECT_URI}`,
     }).toString(),
-    //   redirect_uri: window.location.origin + "/login",
+      // redirect_uri: window.location.origin + "/login",
     redirect_uri: "https://zklogin-dev-redirect.vercel.app/api/auth",
     response_type: "id_token",
     scope: "openid",

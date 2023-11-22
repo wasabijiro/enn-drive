@@ -3,7 +3,8 @@
 import formatCreatedAt from "@/utils/formatDate";
 
 // @ts-ignore
-export const useApi = (user_id, getCurrentPosition, account) => {
+export const useApi = (user_id, getCurrentPosition) => {
+  
   // @ts-ignore
   const apiRequest = async (endpoint, options) => {
     const response = await fetch(endpoint, {
@@ -20,11 +21,15 @@ export const useApi = (user_id, getCurrentPosition, account) => {
   };
   // @ts-ignore
   const addLocation = async () => {
+
+    console.log("-start- addLocation")
     try {
       const position = await getCurrentPosition();
+      console.log("-finish- getCurrentPosition")
       // @ts-ignore
       const { latitude, longitude } = position.coords;
-      const newLocation = await apiRequest("/api/location", {
+      console.log({ user_id,latitude, longitude });
+      const newLocation = await apiRequest("http://localhost:3000/api/location", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id, latitude, longitude }),
@@ -44,7 +49,7 @@ export const useApi = (user_id, getCurrentPosition, account) => {
       const { latitude, longitude } = position.coords;
       await apiRequest("/api/like", {
         method: "POST",
-        body: JSON.stringify({ user_id, latitude, longitude, account }),
+        body: JSON.stringify({ user_id, latitude, longitude }),
       });
     } catch (error) {
       console.error("Error sending like: ", error);

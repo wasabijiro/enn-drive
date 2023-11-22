@@ -27,6 +27,7 @@ export async function GET() {
 export async function POST(request) {
   console.log("location post -start-");
   const { user_id, latitude, longitude } = await request.json();
+  console.log({user_id});
   const { data, error } = await supabase
     .from("locations")
     .insert([{ user_id, latitude, longitude }]);
