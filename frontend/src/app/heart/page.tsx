@@ -21,13 +21,7 @@ const HeartAnimation = () => {
                     top: `calc(${Math.random() * 100}% - 4em)`
                 }
             };
-            // @ts-ignore
             setHearts(currentHearts => [...currentHearts, newHeart]);
-
-            // 5秒後にハートを削除する
-            // setTimeout(() => {
-            //     setHearts(currentHearts => currentHearts.filter(heart => heart.id !== id));
-            // }, 5000);
 
         }, 60);
 
@@ -37,7 +31,6 @@ const HeartAnimation = () => {
     return (
         <div className='fixed h-full w-full z-0 fullheart'>
             {hearts.map(heart => (
-                // @ts-ignore
                 <div key={heart.id} className="heart" style={heart.style}>
                     <FontAwesomeIcon icon={faHeart} size={'8x'} />
                 </div>

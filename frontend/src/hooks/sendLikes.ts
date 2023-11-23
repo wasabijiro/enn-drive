@@ -6,14 +6,12 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { moveCallSponsoredLike } from "@/libs/sponsoredZkLogin";
 import { suiClient } from "@/config/sui";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabaseUrl:any = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey:any = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
-// @ts-ignore
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// @ts-ignore
-export default async function sendLikes(user_id, latitude, longitude, account) {
+export default async function sendLikes(user_id:any, latitude:any, longitude:any, account:any) {
 
   console.log({ user_id });
 
@@ -38,7 +36,7 @@ export default async function sendLikes(user_id, latitude, longitude, account) {
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: user_id, latitude, longitude }),
+      body: JSON.stringify({ user_id, latitude, longitude }),
     }
   );
   if (!nearbyResponse.ok) {

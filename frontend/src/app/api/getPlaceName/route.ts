@@ -1,6 +1,5 @@
 // app/api/examplePost.ts
-// @ts-ignore
-export async function POST(req) {
+export async function POST(req:any) {
     try {
         // リクエストからボディを取得します（もしボディがある場合）
         const { lat, lon } = await req.json();
@@ -20,8 +19,7 @@ export async function POST(req) {
                 'Content-Type': 'application/json'
             }
         });
-    } catch (error) {
-        // @ts-ignore
+    } catch (error:any) {
         return new Response(JSON.stringify({ error: error.message }), {
             status: 500,
             headers: {

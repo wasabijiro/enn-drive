@@ -41,8 +41,7 @@ const LikeScreen = () => {
     useApi(user_id, getCurrentPosition, zkLoginSetup.account);
 
   useEffect(() => {
-    // @ts-ignore
-    let intervalId;
+    let intervalId:any;
     if (play) {
       intervalId = setInterval(() => {
         console.log("send");
@@ -62,7 +61,6 @@ const LikeScreen = () => {
       }
     }
     return () => {
-      // @ts-ignore
       if (intervalId) {
         clearInterval(intervalId);
       }
@@ -139,8 +137,7 @@ const LikeScreen = () => {
     likeFunction();
   };
 
-  //   @ts-ignore
-  const handleClose = (event, reason) => {
+  const handleClose = ( reason:any) => {
     if (reason === "clickaway") {
       return;
     }

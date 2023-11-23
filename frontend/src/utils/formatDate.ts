@@ -1,5 +1,4 @@
-// @ts-ignore
-export default function formatCreatedAt(createdAt) {
+export default function formatCreatedAt(createdAt:any) {
     // 日付オブジェクトを作成
     const date = new Date(createdAt);
 
@@ -15,7 +14,6 @@ export default function formatCreatedAt(createdAt) {
     const dateStr = date.toDateString();
 
     // 日付をフォーマット
-    // @ts-ignore
     let formattedDate = date.toLocaleDateString('en-US', options);
 
     // 日付が今日の場合は 'today' を使う

@@ -1,13 +1,11 @@
 // app/api/getNearbyLocations/route.ts
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-// @ts-ignore
+const supabaseUrl:any = process.env.SUPABASE_URL;
+const supabaseKey:any = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// @ts-ignore
-export async function POST(req) {
+export async function POST(req:any) {
   try {
     const { user_id, latitude, longitude } = await req.json();
     console.log("getNearbyLocations");
@@ -18,8 +16,7 @@ export async function POST(req) {
     }
     
     return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    // @ts-ignore
+  } catch (error:any) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }

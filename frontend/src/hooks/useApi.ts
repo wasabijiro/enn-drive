@@ -3,10 +3,8 @@
 import formatCreatedAt from "@/utils/formatDate";
 import sendLikes from "./sendLikes";
 
-// @ts-ignore
-export const useApi = (user_id, getCurrentPosition, account) => {
-  // @ts-ignore
-  const apiRequest = async (endpoint, options) => {
+export const useApi = (user_id: any, getCurrentPosition: any, account: any) => {
+  const apiRequest = async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, {
       headers: {
         "Content-Type": "application/json",
@@ -19,12 +17,11 @@ export const useApi = (user_id, getCurrentPosition, account) => {
     }
     return response.json();
   };
-  // @ts-ignore
   const addLocation = async () => {
     try {
       const position = await getCurrentPosition();
-      // @ts-ignore
       const { latitude, longitude } = position.coords;
+      console.log({ latitude, longitude })
       const newLocation = await apiRequest("/api/location", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,30 +34,16 @@ export const useApi = (user_id, getCurrentPosition, account) => {
       console.error("Error adding location: ", error);
     }
   };
-  // @ts-ignore
   const likeFunction = async () => {
     try {
       const position = await getCurrentPosition();
-      // @ts-ignore
       const { latitude, longitude } = position.coords;
       sendLikes(user_id, latitude, longitude, account);
     } catch (error) {
       console.error("Error sending like: ", error);
     }
   };
-  // @ts-ignore
-  const fetchTotalTokens = async (
-    // @ts-ignore
-    sumToken,
-    // @ts-ignore
-    toggleHeart,
-    // @ts-ignore
-    setSumToken,
-    // @ts-ignore
-    setLastDate,
-    // @ts-ignore
-    setGeo
-  ) => {
+  const fetchTotalTokens = async (sumToken: any, toggleHeart: any, setSumToken: any, setLastDate: any, setGeo: any) => {
     try {
       const response = await fetch("http://localhost:3000/api/getLikeInfo", {
         method: "POST",
@@ -79,21 +62,15 @@ export const useApi = (user_id, getCurrentPosition, account) => {
           toggleHeart();
         }
         setSumToken(latestLike.total_tokens);
-        // @ts-ignore
         setLastDate(formatCreatedAt(latestLike.latest_created_at));
-        // @ts-ignore
-        setGeo({
-          lat: latestLike.latest_latitude,
-          lon: latestLike.latest_longitude,
-        });
+        setGeo({ lat: latestLike.latest_latitude, lon: latestLike.latest_longitude, });
       }
     } catch (error) {
       console.error("Fetching total tokens failed:", error);
     }
   };
 
-  // @ts-ignore
-  const fetchPlaceName = async (geo, setPlaceName) => {
+  const fetchPlaceName = async (geo:any, setPlaceName:any) => {
     if (geo.lat && geo.lon) {
       try {
         const response = await fetch("http://localhost:3000/api/getPlaceName", {

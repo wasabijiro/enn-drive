@@ -1,12 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-// @ts-ignore
+const supabaseUrl:any = process.env.SUPABASE_URL;
+const supabaseKey:any = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// @ts-ignore
-export async function POST(request) {
+export async function POST(request:any) {
   try {
     const body = await request.json();
     
@@ -31,8 +29,7 @@ export async function POST(request) {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
-    // @ts-ignore
+  } catch (error:any) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: {
