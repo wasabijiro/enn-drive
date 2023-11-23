@@ -13,6 +13,7 @@ import { NETWORK } from "@/config/sui";
 import style from "@/styles/login.module.css";
 import { styles } from "@/styles";
 import { driveObjectType } from "@/config";
+import { moveCallSponsoredLike } from "@/libs/sponsoredZkLogin";
 
 export default function Home() {
   const router = useRouter();
@@ -43,40 +44,21 @@ export default function Home() {
     return "Ready!";
   };
 
+  // const movecall = async () => {
+  //   const txb = new TransactionBlock();
+  //   const result = await moveCallSponsoredLike(
+  //     txb,
+  //     zkLoginSetup.account(),
+  //     "0x43ea6b4feb9cf61ae6211b9384a1d80893916e84fb11d57aad01b202691d4cf6"
+  //   );
+  //   console.log(result.effects?.status.status);
+  // };
+
   return (
     <div
       className="flex flex-col items-center justify-center w-full"
       style={styles.compose}
     >
-      <div style={styles.contentTop}>
-        <p
-          className={`${style.mySpecialFont} text-right text-black text-xl mr-5`}
-        >
-          Sui {NETWORK === "testnet" ? "Testnet" : "Mainnet"}
-        </p>
-        <p
-          className={`${style.mySpecialFont} text-center text-black text-4xl mt-5`}
-        >
-          Sui POAP
-        </p>
-        <p
-          className={`${style.mySpecialFont} mt-5 text-center text-black text-3xl font-bold leading-9`}
-        >
-          <span className="text-2xl">by</span> zkLogin & Sponsored Transaction,
-          <br />
-        </p>
-        <p
-          className={`${style.mySpecialFont} flex items-center justify-center mt-3 text-center text-black text-3xl font-bold leading-9 gap-2`}
-        >
-          <span className="text-2xl">presented by</span> Umi Labs
-          <img
-            src="/logo.png"
-            alt="Umi Labs Logo"
-            style={{ height: "1.25em" }}
-          />
-        </p>
-      </div>
-
       <div className="flex flex-col">
         <div className="flex mb-2">
           <p className="text-black text-lg flex-shrink-0">zkLogin Address:</p>

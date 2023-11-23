@@ -37,6 +37,8 @@ export const moveCallSponsoredMint = async (
 
   const gaslessTxb = TransactionBlock.from(sponsoredResponse.txBytes);
 
+  console.log({ gaslessTxb });
+
   const ephemeralKeyPair = Ed25519Keypair.fromSecretKey(
     Buffer.from(account.ephemeralPrivateKey, "base64")
   );
@@ -52,6 +54,7 @@ export const moveCallSponsoredMint = async (
     account.aud
   ).toString();
 
+  console.log({ addressSeed });
   // Serialize the zkLogin signature by combining the ZK proof (inputs), the maxEpoch,
   // and the ephemeral signature (userSignature).
   const zkLoginSignature: SerializedSignature = getZkLoginSignature({
@@ -109,6 +112,8 @@ export const moveCallSponsoredLike = async (
 
   const gaslessTxb = TransactionBlock.from(sponsoredResponse.txBytes);
 
+  console.log({ gaslessTxb });
+
   const ephemeralKeyPair = Ed25519Keypair.fromSecretKey(
     Buffer.from(account.ephemeralPrivateKey, "base64")
   );
@@ -123,6 +128,7 @@ export const moveCallSponsoredLike = async (
     account.sub,
     account.aud
   ).toString();
+  console.log({ addressSeed });
 
   // Serialize the zkLogin signature by combining the ZK proof (inputs), the maxEpoch,
   // and the ephemeral signature (userSignature).
@@ -134,6 +140,8 @@ export const moveCallSponsoredLike = async (
     maxEpoch: account.maxEpoch,
     userSignature,
   });
+
+  console.log({ zkLoginSignature });
 
   // Execute the transaction
   const r = await suiClient.executeTransactionBlock({
