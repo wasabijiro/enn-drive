@@ -6,8 +6,9 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { moveCallSponsoredLike } from "@/libs/sponsoredZkLogin";
 import { suiClient } from "@/config/sui";
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+
 // @ts-ignore
 const supabase = createClient(supabaseUrl, supabaseKey);
 

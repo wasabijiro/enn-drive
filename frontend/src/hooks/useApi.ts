@@ -3,8 +3,6 @@
 import formatCreatedAt from "@/utils/formatDate";
 import sendLikes from "./sendLikes";
 
-
-
 // @ts-ignore
 export const useApi = (user_id, getCurrentPosition, account) => {
   // @ts-ignore
