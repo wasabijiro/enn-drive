@@ -13,6 +13,7 @@ export default function formatCreatedAt(createdAt:any) {
     const today = now.toDateString();
     const dateStr = date.toDateString();
 
+            // @ts-ignore
     // 日付をフォーマット
     let formattedDate = date.toLocaleDateString('en-US', options);
 
