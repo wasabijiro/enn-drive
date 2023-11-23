@@ -1,6 +1,9 @@
 // hooks/useApi.ts
 
 import formatCreatedAt from "@/utils/formatDate";
+import sendLikes from "./sendLikes";
+
+
 
 // @ts-ignore
 export const useApi = (user_id, getCurrentPosition, account) => {
@@ -42,10 +45,7 @@ export const useApi = (user_id, getCurrentPosition, account) => {
       const position = await getCurrentPosition();
       // @ts-ignore
       const { latitude, longitude } = position.coords;
-      await apiRequest("/api/like", {
-        method: "POST",
-        body: JSON.stringify({ user_id, latitude, longitude, account }),
-      });
+      sendLikes(user_id, latitude, longitude, account);
     } catch (error) {
       console.error("Error sending like: ", error);
     }
