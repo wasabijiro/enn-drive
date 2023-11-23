@@ -34,7 +34,7 @@ export const moveCallMintNft = (
 
 export function callLike(txb: TransactionBlock, args: any) {
   return txb.moveCall({
-    target: `${PACKAGE_ID}::issuer::mint`,
+    target: `${PACKAGE_ID}::issuer::like`,
     arguments: [txb.pure(args.id)],
   });
 }
@@ -45,7 +45,7 @@ export const moveCallLike = (
     id: string;
   }
 ) => {
-  callMint(txb, {
+  callLike(txb, {
     id: props.id,
   });
 };
