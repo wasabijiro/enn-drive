@@ -9,6 +9,7 @@ const fetchSponsoredTransaction = async (
   userAddress: string
 ) => {
   console.log("## 1413", payloadBytes);
+  console.log("## 1414", userAddress);
 
   const payloadBase64 = btoa(
     payloadBytes.reduce((data, byte) => data + String.fromCharCode(byte), "")

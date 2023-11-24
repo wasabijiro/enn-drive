@@ -40,6 +40,20 @@ const LikeScreen = () => {
   const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } =
     useApi(user_id, getCurrentPosition);
 
+    const account = {
+      provider: zkLoginSetup.provider,
+      userAddr: zkLoginSetup.userAddr,
+      zkProofs: zkLoginSetup.zkProofs,
+      ephemeralPublicKey: zkLoginSetup.ephemeralPublicKey,
+      ephemeralPrivateKey: zkLoginSetup.ephemeralPrivateKey,
+      userSalt: zkLoginSetup.salt(),
+      jwt: zkLoginSetup.jwt,
+      sub: zkLoginSetup.sub,
+      aud: zkLoginSetup.aud,
+      maxEpoch: zkLoginSetup.maxEpoch,
+      randomeness: zkLoginSetup.randomness,
+    };
+
   useEffect(() => {
     let intervalId: any;
     if (play) {
@@ -134,7 +148,8 @@ const LikeScreen = () => {
 
   const handleClick = () => {
     setOpen(true);
-    likeFunction(zkLoginSetup.account);
+    // likeFunction(zkLoginSetup.account);
+    likeFunction(account);
   };
 
   const handleClose = (event: any, reason: any) => {
