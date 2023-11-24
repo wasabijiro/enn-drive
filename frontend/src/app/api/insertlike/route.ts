@@ -14,8 +14,7 @@ export async function POST(request:any) {
         taker_id: body.taker_id,
         latitude: body.latitude,
         longitude: body.longitude,
-        tokens: body.tokens,
-        density: body.density,
+        tokens: 1,
       },
     ]);
     

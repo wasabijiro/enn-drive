@@ -8,6 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export async function POST(req:any) {
     try {
         const { taker_id } = await req.json();
+        console.log("getLikeInfo",{taker_id});
         const { data, error } = await supabase
             .rpc("get_like_info_by_taker_id", { _taker_id: taker_id });
         if (error) {
