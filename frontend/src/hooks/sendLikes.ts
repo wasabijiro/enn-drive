@@ -50,7 +50,7 @@ export default async function sendLikes(user_id:any, latitude:any, longitude:any
 
   // 取得したユーザーに対していいねを送る
   for (const user of nearbyUsers) {
-    console.log(user);
+    console.log("test-test",user);
     if (user.user_id !== user_id) {
       const obj_id = await getOwnedDriveObjectId(user.user_id, NFT_TYPE);
       const field: any = await suiClient.getObject({

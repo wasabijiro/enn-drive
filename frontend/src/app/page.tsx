@@ -38,10 +38,10 @@ const LikeScreen = () => {
   const zkLoginSetup = useZkLoginSetup();
 
   const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } =
-    useApi(user_id, getCurrentPosition, zkLoginSetup.account);
+    useApi(user_id, getCurrentPosition);
 
   useEffect(() => {
-    let intervalId:any;
+    let intervalId: any;
     if (play) {
       intervalId = setInterval(() => {
         console.log("send");
@@ -134,10 +134,10 @@ const LikeScreen = () => {
 
   const handleClick = () => {
     setOpen(true);
-    likeFunction();
+    likeFunction(zkLoginSetup.account);
   };
 
-  const handleClose = (event:any, reason:any) => {
+  const handleClose = (event: any, reason: any) => {
     if (reason === "clickaway") {
       return;
     }
@@ -189,15 +189,16 @@ const LikeScreen = () => {
         </div>
         <div className="flex justify-center mt-4">
           <button
-            className={`text-slate-50 w-12 h-12 justify-center align-center me-5 rounded-full ${
-              !play ? "bg-green-500" : "bg-red-500"
-            }`}
+            className={`text-slate-50 h-12 justify-center align-center me-5 rounded ${!play ? "bg-sky-500" : "bg-red-500"
+              }`}
             onClick={togglePlay}
           >
             {!play ? (
-              <FontAwesomeIcon icon={faCar} size={"xl"} />
+              <p>運転を開始する</p>
+              // <FontAwesomeIcon icon={faCar} size={"xl"} />
             ) : (
-              <FontAwesomeIcon icon={faStop} size={"xl"} />
+              <p>運転を止める</p>
+              // <FontAwesomeIcon icon={faStop} size={"xl"} />
             )}
           </button>
           <button
@@ -208,33 +209,29 @@ const LikeScreen = () => {
             <span className="font-extrabold text-lg">Like</span>
             <FontAwesomeIcon icon={faHeart} className="ms-2" size={"xl"} />
           </button>
-          <div className="w-12 ms-5"></div>
         </div>
       </div>
       <div id="navbar" className="fixed bottom-0 left-0 right-0">
         <div className="bg-gray-800 text-white flex justify-evenly">
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
-              selectedTab === "home" ? "bg-gray-700" : ""
-            }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "home" ? "bg-gray-700" : ""
+              }`}
             onClick={() => setSelectedTab("home")}
           >
             <FontAwesomeIcon icon={faHouse} size={"xl"} className="mb-1" />
             <span className="text-xs">Home</span>
           </button>
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
-              selectedTab === "trophy" ? "bg-gray-700" : ""
-            }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "trophy" ? "bg-gray-700" : ""
+              }`}
             onClick={() => setSelectedTab("trophy")}
           >
             <FontAwesomeIcon icon={faTrophy} size={"xl"} className="mb-1" />
             <span className="text-xs">Trophy</span>
           </button>
           <button
-            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${
-              selectedTab === "settings" ? "bg-gray-700" : ""
-            }`}
+            className={`py-3 flex flex-col items-center justify-center flex-1 text-center ${selectedTab === "settings" ? "bg-gray-700" : ""
+              }`}
             onClick={() => setSelectedTab("settings")}
           >
             <FontAwesomeIcon icon={faGear} size={"xl"} className="mb-1" />
