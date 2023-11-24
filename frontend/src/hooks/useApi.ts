@@ -21,15 +21,11 @@ export const useApi = (user_id: any, getCurrentPosition: any) => {
     try {
       const position = await getCurrentPosition();
       const { latitude, longitude } = position.coords;
-      console.log({ latitude, longitude })
-      const newLocation = await apiRequest("/api/location", {
+      await apiRequest("/api/location", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id, latitude, longitude }),
       });
-      if (!newLocation || !("id" in newLocation)) {
-        throw new Error("Invalid location data");
-      }
     } catch (error) {
       console.error("Error adding location: ", error);
     }
@@ -43,8 +39,9 @@ export const useApi = (user_id: any, getCurrentPosition: any) => {
       console.error("Error sending like: ", error);
     }
   };
-  const fetchTotalTokens = async (sumToken: any, toggleHeart: any, setSumToken: any, setLastDate: any, setGeo: any) => {
+  const fetchTotalTokens = async (sumToken: any, setHeart: any, setSumToken: any, setLastDate: any, setGeo: any) => {
     try {
+      console.log(user_id);
       const response = await fetch("http://localhost:3000/api/getLikeInfo", {
         method: "POST",
         headers: {
@@ -59,7 +56,7 @@ export const useApi = (user_id: any, getCurrentPosition: any) => {
       if (responseData.length > 0) {
         const latestLike = responseData[0];
         if (sumToken && sumToken != latestLike.total_tokens) {
-          toggleHeart();
+          setHeart(true);
         }
         setSumToken(latestLike.total_tokens);
         setLastDate(formatCreatedAt(latestLike.latest_created_at));
@@ -70,7 +67,7 @@ export const useApi = (user_id: any, getCurrentPosition: any) => {
     }
   };
 
-  const fetchPlaceName = async (geo:any, setPlaceName:any) => {
+  const fetchPlaceName = async (geo: any, setPlaceName: any) => {
     if (geo.lat && geo.lon) {
       try {
         const response = await fetch("http://localhost:3000/api/getPlaceName", {
