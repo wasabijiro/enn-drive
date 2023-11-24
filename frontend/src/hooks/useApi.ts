@@ -3,7 +3,7 @@
 import formatCreatedAt from "@/utils/formatDate";
 import sendLikes from "./sendLikes";
 
-export const useApi = (user_id: any, getCurrentPosition: any, account: any) => {
+export const useApi = (user_id: any, getCurrentPosition: any) => {
   const apiRequest = async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, {
       headers: {
@@ -34,7 +34,7 @@ export const useApi = (user_id: any, getCurrentPosition: any, account: any) => {
       console.error("Error adding location: ", error);
     }
   };
-  const likeFunction = async () => {
+  const likeFunction = async (account: any) => {
     try {
       const position = await getCurrentPosition();
       const { latitude, longitude } = position.coords;
