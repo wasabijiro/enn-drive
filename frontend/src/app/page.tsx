@@ -83,8 +83,14 @@ const LikeScreen = () => {
       intervalId = setInterval(() => {
         console.log("send");
         addLocation();
-        fetchTotalTokens(sumToken, setHeart, setSumToken, setLastDate, setGeo);
-      }, 15000);
+        fetchTotalTokens(
+          sumToken,
+          setHeart,
+          setSumToken,
+          setLastDate,
+          setGeo
+        )
+      }, 3000);
     } else {
       console.log("not send");
       if (intervalId) {
@@ -182,7 +188,7 @@ const LikeScreen = () => {
         className="w-full bg-rose-400 text-white mt-4 text-3xl py-3 rounded-lg shadow-md"
         onClick={handleClick}
       >
-        Like
+        いいね
         <FontAwesomeIcon className="mx-2" icon={faHeart} />
       </button>
       {mintDigest && showMessage && (
