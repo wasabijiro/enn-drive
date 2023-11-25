@@ -13,7 +13,7 @@ import { NETWORK } from "@/config/sui";
 import style from "@/styles/login.module.css";
 import { styles } from "@/styles";
 import { driveObjectType } from "@/config";
-import { moveCallSponsoredLike } from "@/libs/sponsoredZkLogin";
+
 
 export default function Home() {
   const router = useRouter();
@@ -30,6 +30,7 @@ export default function Home() {
     if (account) {
       zkLoginSetup.completeZkLogin(account);
     }
+
   }, []);
 
   const status = () => {

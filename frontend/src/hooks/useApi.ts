@@ -58,6 +58,7 @@ export const useApi = (user_id: any, getCurrentPosition: any) => {
         if (sumToken && sumToken != latestLike.total_tokens) {
           setHeart(true);
         }
+        console.log("latestLike.total_tokens",latestLike.total_tokens);
         setSumToken(latestLike.total_tokens);
         setLastDate(formatCreatedAt(latestLike.latest_created_at));
         setGeo({ lat: latestLike.latest_latitude, lon: latestLike.latest_longitude, });

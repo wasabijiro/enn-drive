@@ -6,7 +6,9 @@ import {
   faHouse,
   faPlay,
   faStop,
+  faTrafficLight,
   faTrophy,
+  faWallet,
 } from "@fortawesome/free-solid-svg-icons";
 import { useZkLoginSetup } from "@/libs/store/zkLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +16,8 @@ import React, { useState, useEffect } from "react";
 import { suiClient } from "@/config/sui";
 import { getOwnedDriveObjectId } from "@/utils/getObject";
 import { NFT_TYPE } from "@/config";
+// import {　ReactComponent as HundleIcon } from "./hundle.svg";
+import { shortenAddress } from "@/utils";
 
 import formatCreatedAt from "@/utils/formatDate";
 
@@ -22,17 +26,20 @@ import HeartAnimation from "@/app/heart/page";
 
 import { useApi } from "@/hooks/useApi";
 import getCurrentPosition from "@/hooks/usePosition";
+import { SvgIcon } from "@mui/material";
+import { moveCallSponsoredLike } from "@/libs/sponsoredZkLogin";
 
 const LikeScreen = () => {
   const [selectedTab, setSelectedTab] = useState("home");
   const [play, setPlay] = useState(false);
   const [open, setOpen] = useState(false);
-  const [sumToken, setSumToken] = useState(null);
+  const [sumToken, setSumToken] = useState(0);
   const [lastDate, setLastDate] = useState(null);
   const [geo, setGeo] = useState({ lat: null, lon: null });
   const [placeName, setPlaceName] = useState("Tokyo");
   const [heart, setHeart] = useState(false);
   const [user_id, setUser_id] = useState<string | null>(null);
+  const [object_id, setObject_id] = useState<string | null>(null);
   const zkLoginSetup = useZkLoginSetup();
 
   const { addLocation, likeFunction, fetchTotalTokens, fetchPlaceName } =
@@ -51,6 +58,19 @@ const LikeScreen = () => {
     maxEpoch: zkLoginSetup.maxEpoch,
     randomeness: zkLoginSetup.randomness,
   };
+
+  const getNFTObjectid = async () => {
+    const obj_id = await getOwnedDriveObjectId(zkLoginSetup.userAddr, NFT_TYPE);
+    const field: any = await suiClient.getObject({
+      id: obj_id,
+      options: {
+        showContent: true,
+        showType: true,
+      },
+    });
+    const nft_id = field.data?.content.fields.nft;
+    setObject_id(nft_id);
+  }
 
   useEffect(() => {
     let intervalId: any;
@@ -80,29 +100,11 @@ const LikeScreen = () => {
   }, [addLocation, fetchTotalTokens, play, sumToken]);
 
   useEffect(() => {
-    console.log("b");
     console.log(zkLoginSetup.userAddr);
     if (zkLoginSetup.userAddr) {
-      console.log("a");
       setUser_id(zkLoginSetup.userAddr);
+      getNFTObjectid();
     }
-    const get_id = async () => {
-      const obj_id = await getOwnedDriveObjectId(
-        zkLoginSetup.userAddr,
-        NFT_TYPE
-      );
-      const field: any = await suiClient.getObject({
-        id: obj_id,
-        options: {
-          showContent: true,
-          showType: true,
-        },
-      });
-      console.log({ field });
-      const nft_id = field.data?.content.fields.nft;
-      console.log({ nft_id });
-    };
-    get_id();
     fetchTotalTokens(sumToken, setHeart, setSumToken, setLastDate, setGeo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -135,30 +137,53 @@ const LikeScreen = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100 px-3">
-      <div className="p-6 max-w-sm w-90 bg-white shadow-md rounded-lg">
+    <div className="flex flex-col justify-center items-center h-screen bg-gray-100 px-3">
+      {heart && <HeartAnimation />}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        autoHideDuration={4000}
+        onClose={handleClose}
+        // message="You spread the likes around!"
+        message={heart ? "いいねされました！" : "いいねの縁を広げました！"}
+        key={"top,center"}
+        sx={{
+          "& .MuiSnackbarContent-root": {
+            backgroundColor: "white", // 背景色を白に設定
+            color: "black", // テキストの色を黒に設定
+          },
+        }}
+      />
+      <div className="p-6 max-w-sm w-90 bg-white shadow-md rounded-lg border-2 shadow-xl">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="rounded-lg" alt="" src={"/mazdacar.png"} />
-        <p>Likes:<span className="mx-1">{sumToken}</span></p>
+        <div className="w-full rounded-lg bg-slate-100 mt-3 py-2 text-center">
+          {object_id && (
+            <p>object-id:<span style={{ color: "#0000EE" }} className="mx-1 underline decoration-solid">{shortenAddress(object_id)}</span></p>
+          )}
+          {/* <p className="text-center text-bold text-2xl">Likes:<span className="mx-2">{sumToken}</span></p> */}
+
+        </div>
+      </div>
+      <button className="w-full bg-rose-400 text-white mt-4 text-3xl py-3 rounded-lg shadow-md" onClick={handleClick}>Like<FontAwesomeIcon className="mx-2" icon={faHeart} /></button>
+      <div className="flex justify-between align-center bg-slate-50 h-18 fixed bottom-0 w-full p-2">
+        <div className="text-center align-center w-32">
+          <span><FontAwesomeIcon icon={faWallet} size="2x" /><span className="mx-2">{sumToken}</span></span>
+          {zkLoginSetup.userAddr && (
+            <p><span style={{ color: "#0000EE" }} className="mx-1 underline decoration-solid">{shortenAddress(zkLoginSetup.userAddr)}</span></p>
+          )}
+        </div>
+        <div className="text-center align-center w-32">
+          <FontAwesomeIcon size="2x" icon={faGear} />
+          <p>設定</p>
+        </div>
+      </div>
+      <div onClick={togglePlay} style={{ bottom: "-4px" }} className={`w-28 h-28 fixed rounded-full flex justify-center items-center ${!play ? "bg-lime-600" : "bg-red-600"}`}>
+        {!play ? <img alt="" className="w-20 h-20" src="/hundle.svg" /> :
+          <FontAwesomeIcon className="text-white" icon={faTrafficLight} size="5x" />}
       </div>
     </div>
     // <div className="bg-gray-100  h-screen flex justify-center items-center">
-    //   {heart && <HeartAnimation />}
-    //   <Snackbar
-    //     anchorOrigin={{ vertical: "top", horizontal: "center" }}
-    //     open={open}
-    //     autoHideDuration={4000}
-    //     onClose={handleClose}
-    //     // message="You spread the likes around!"
-    //     message="You spread an enn of likes!"
-    //     key={"top,center"}
-    //     sx={{
-    //       "& .MuiSnackbarContent-root": {
-    //         backgroundColor: "white", // 背景色を白に設定
-    //         color: "black", // テキストの色を黒に設定
-    //       },
-    //     }}
-    //   />
     //   <div className="p-3 mx-3 max-w-sm w-full bg-white shadow-md rounded-md z-10">
     //     <div className="flex justify-center my-4">
     //       <div className="relative w-64 h-64">

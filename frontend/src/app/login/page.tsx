@@ -73,15 +73,15 @@ export default function Home() {
       <div className="p-6 max-w-sm w-90 bg-white shadow-md rounded-md">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="rounded-lg" alt="" src={"/like.png"} />
-        <h1 className="text-xl font-bold text-center mb-1 mt-2">enn-Drive</h1>
-        <p className="text-center mb-2 font-bold">Drive Safe, Earn Likes.</p>
+        <h1 className="text-2xl font-bold text-center mb-1 mt-2">Enn-Drive</h1>
+        <p className="text-xl text-center mb-2 font-bold">Drive Safe, Earn Likes.</p>
         <div
           id="login-buttons"
           className="section mb-2 flex items-center justify-center"
         >
           {openIdProviders.map((provider) => (
             <button
-              className={`btn-login text-black font-bold py-1 px-10 rounded border-[2px] border-gray-300 ${provider}`}
+              className={`btn-login text-black text-xl font-bold py-1 px-10 rounded border-[2px] border-gray-300 ${provider}`}
               onClick={() => {
                 beginZkLogin(provider);
               }}
