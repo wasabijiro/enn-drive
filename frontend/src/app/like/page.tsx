@@ -169,7 +169,8 @@ const LikeScreen = () => {
               <a
                 style={{ color: "#0000EE" }}
                 className="mx-1 underline decoration-solid"
-                href={`https://suiscan.xyz/${NETWORK}/object/${object_id}`}
+                // href={`https://suiscan.xyz/${NETWORK}/object/${object_id}`}
+                href={`https://suiexplorer.com/object/${object_id}?network=${NETWORK}`}
               >
                 {shortenAddress(object_id)}
               </a>
@@ -194,7 +195,8 @@ const LikeScreen = () => {
             <a
               style={{ color: "#0000EE" }}
               className="mx-1 underline decoration-solid"
-              href={`https://suiscan.xyz/${NETWORK}/tx/${mintDigest}`}
+              // href={`https://suiscan.xyz/${NETWORK}/tx/${mintDigest}`}
+              href={`https://suiexplorer.com/txblock/${mintDigest}?network=${NETWORK}`}
             >
               {shortenAddress(mintDigest)}
             </a>
@@ -210,7 +212,8 @@ const LikeScreen = () => {
             <a
               style={{ color: "#0000EE" }}
               className="mx-1 underline decoration-solid"
-              href={`https://suiscan.xyz/${NETWORK}/account/${zkLoginSetup.userAddr}`}
+              // href={`https://suiscan.xyz/${NETWORK}/account/${zkLoginSetup.userAddr}`}
+              href={`https://suiexplorer.com/address/${zkLoginSetup.userAddr}?network=${NETWORK}`}
             >
               {shortenAddress(zkLoginSetup.userAddr)}
             </a>
@@ -228,7 +231,8 @@ const LikeScreen = () => {
               <a
                 style={{ color: "#0000EE" }}
                 className="mx-1 underline decoration-solid"
-                href={`https://suiscan.xyz/${NETWORK}/account/${zkLoginSetup.userAddr}`}
+                // href={`https://suiscan.xyz/${NETWORK}/account/${zkLoginSetup.userAddr}`}
+                href={`https://suiexplorer.com/address/${zkLoginSetup.userAddr}?network=${NETWORK}`}
               >
                 {shortenAddress(zkLoginSetup.userAddr)}
               </a>
