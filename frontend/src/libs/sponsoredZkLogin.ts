@@ -14,7 +14,7 @@ export const moveCallSponsoredMint = async (
   moveCallMintNft(txb, {
     name: "Mazda Drive NFT",
     description: "Web3 Global Hackathon for Mazda",
-    url: "ipfs://bafybeiez4cq7ixp6h2fgzlzl2223t4pdydl6udxefxy4lxairivszceptm",
+    url: "ipfs://QmXMV3wRFHdtdXJjPT8VaKWohWm2EtPeDiCHk6mWRtHMLw",
   });
   const payloadBytes = await txb.build({
     client: suiClient,
