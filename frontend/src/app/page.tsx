@@ -85,7 +85,7 @@ const LikeScreen = () => {
           setLastDate,
           setGeo
         )
-      }, 15000);
+      }, 3000);
     } else {
       console.log("not send");
       if (intervalId) {
@@ -165,7 +165,7 @@ const LikeScreen = () => {
 
         </div>
       </div>
-      <button className="w-full bg-rose-400 text-white mt-4 text-3xl py-3 rounded-lg shadow-md" onClick={handleClick}>Like<FontAwesomeIcon className="mx-2" icon={faHeart} /></button>
+      <button className="w-full bg-rose-400 text-white mt-4 text-3xl py-3 rounded-lg shadow-md" onClick={handleClick}>いいね<FontAwesomeIcon className="mx-2" icon={faHeart} /></button>
       <div className="flex justify-between align-center bg-slate-50 h-18 fixed bottom-0 w-full p-2">
         <div className="text-center align-center w-32">
           <span><FontAwesomeIcon icon={faWallet} size="2x" /><span className="mx-2">{sumToken}</span></span>

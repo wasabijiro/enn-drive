@@ -56,47 +56,26 @@ export default function Home() {
   // };
 
   return (
-    <div
-      className="flex flex-col items-center justify-center w-full"
-      style={styles.compose}
-    >
-      <div className="flex flex-col">
-        <div className="flex mb-2">
-          <p className="text-black text-lg flex-shrink-0">zkLogin Address:</p>
-          {zkLoginSetup.userAddr && (
-            <b className="ml-2">
-              <a
-                className="text-blue-400 underline"
-                href={`https://suiscan.xyz/${NETWORK}/account/${zkLoginSetup.userAddr}/tx-blocks`}
-              >
-                {shortenAddress(zkLoginSetup.userAddr)}
-              </a>
-            </b>
-          )}
-        </div>
-        <div className="flex mb-4">
-          <p className="text-black text-lg flex-shrink-0">Current Status:</p>
-          <b className="ml-2 text-black text-lg">{status()}</b>
-        </div>
-        <p className="mt-2">
-          <a
-            className="text-blue-400 underline"
-            href={`https://suiscan.xyz/${NETWORK}/tx/${digest}`}
-          >
-            {digest}
-          </a>
-        </p>
-      </div>
-      <div>
-        <div className="text-red-700 text-lg flex-shrink-0">
-          <b>{err}</b>
-        </div>
-      </div>
-      <div
-        className="flex flex-col justify-center items-center mb-5"
-        style={styles.contentBottom}
-      >
+
+    <div className="flex justify-center items-center h-screen bg-gray-100 px-3">
+      <div className="p-6 max-w-sm w-90 bg-white shadow-md rounded-md">
+        <h1 className="text-xl font-bold">このアプリの使い方</h1>
+        <ol className="my-2">
+          <li className="text-lg font-bold">運転開始の設定:</li>
+          <li style={{ textIndent: "10px" }}>アプリを開いたら、運転開始ボタンを押して<span className="text-lime-600 font-bold">運転モード</span>に入ります。</li>
+          <li style={{ textIndent: "10px" }}><span className="text-lime-600 font-bold">運転開始ボタン</span>を押さないと<span className="text-rose-400 font-bold">「いいね」</span>のフェッチが行われません。 </li>
+          <li className="text-lg font-bold"><span className="text-rose-400 font-bold">「いいね」</span>の送信: </li>
+          <li style={{ textIndent: "10px" }}>運転中に良い行動を目撃した際に、ワンタップで周囲の車にまとめて<span className="text-rose-400 font-bold">「いいね」</span>を送ります。 </li>
+          <li style={{ textIndent: "10px" }}><span className="text-rose-400 font-bold">「いいね」</span>は特定の車へ送るのではなく、周囲の車全体に対して行います。 </li>
+          <li className="text-lg font-bold"><span className="text-rose-400 font-bold">「いいね」</span>の受信と通知: </li>
+          <li style={{ textIndent: "10px" }}>自分が<span className="text-rose-400 font-bold">「いいね」</span>を受け取った場合、アプリから通知が届きます。 </li>
+        </ol>
         <button
+          className={`w-full text-white w-32 py-3 px-5 rounded-xl text-xl ${style.myRobotoFont
+            } ${!zkLoginSetup.zkProofs
+              ? "bg-slate-800"
+              : "bg-blue-600 hover:bg-slate-700"
+            }`}
           onClick={async () => {
             setLoading(true);
             const account = zkLoginSetup.account();
@@ -122,16 +101,9 @@ export default function Home() {
             }
             setLoading(false);
           }}
-          className={`text-white w-32 py-3 px-5 rounded-xl text-xl ${
-            style.myRobotoFont
-          } ${
-            !zkLoginSetup.zkProofs
-              ? "bg-slate-800"
-              : "bg-blue-600 hover:bg-slate-700"
-          }`}
           disabled={!zkLoginSetup.zkProofs || loading}
         >
-          {loading || zkLoginSetup.isProofsLoading ? "Loading..." : "Mint"}
+          {loading || zkLoginSetup.isProofsLoading ? (loading ? "ミント中" : "アドレスを生成中") : "Let's Drive!"}
         </button>
       </div>
     </div>
