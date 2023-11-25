@@ -6,13 +6,17 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { moveCallSponsoredLike } from "@/libs/sponsoredZkLogin";
 import { suiClient } from "@/config/sui";
 
-const supabaseUrl:any = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey:any = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+const supabaseUrl: any = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey: any = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default async function sendLikes(user_id:any, latitude:any, longitude:any, account:any) {
-
+export default async function sendLikes(
+  user_id: any,
+  latitude: any,
+  longitude: any,
+  account: any
+) {
   console.log({ user_id });
 
   const obj_id = await getOwnedDriveObjectId(user_id, NFT_TYPE);
@@ -50,7 +54,7 @@ export default async function sendLikes(user_id:any, latitude:any, longitude:any
 
   // 取得したユーザーに対していいねを送る
   for (const user of nearbyUsers) {
-    console.log("test-test",user);
+    console.log("test-test", user);
     if (user.user_id !== user_id) {
       const obj_id = await getOwnedDriveObjectId(user.user_id, NFT_TYPE);
       const field: any = await suiClient.getObject({

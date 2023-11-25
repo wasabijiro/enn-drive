@@ -14,12 +14,14 @@ import style from "@/styles/login.module.css";
 import { styles } from "@/styles";
 import { driveObjectType } from "@/config";
 
-
 export default function Home() {
   const router = useRouter();
   const [modalContent, setModalContent] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [digest, setDigest] = useState<string>("");
+  const [mintDigest, setMintDigest] = useLocalStorage<string | null>(
+    "mint-digest",
+    null
+  );
   const [err, setErr] = useState<string>("");
   const [account, setAccount] = useLocalStorage<Account | null>(
     ZKLOGIN_ACCONTS,
@@ -30,7 +32,6 @@ export default function Home() {
     if (account) {
       zkLoginSetup.completeZkLogin(account);
     }
-
   }, []);
 
   const status = () => {
@@ -85,7 +86,7 @@ export default function Home() {
             const result = await moveCallSponsoredMint(txb, account);
             console.log(result.effects?.status.status);
             if (result.effects?.status.status === "success") {
-              setDigest(result.digest);
+              setMintDigest(result.digest);
               const matchingObject: any = result.objectChanges?.find(
                 (obj: any) => obj?.objectType === driveObjectType
               );
